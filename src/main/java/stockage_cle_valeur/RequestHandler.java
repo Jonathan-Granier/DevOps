@@ -1,6 +1,7 @@
 package main.java.stockage_cle_valeur;
 
 import main.java.base_de_donnees.BDD_Interface;
+import main.java.exception.NonExistingKeyException;
 
 /**
  * TODO
@@ -51,7 +52,14 @@ public class RequestHandler {
 	 */
 	public Object get(Integer cle){
 		System.out.println("Acces a " + cle);
-		return BDD.get(cle);
+		Object res = null;
+		try{
+			res = BDD.get(cle);
+		}
+		catch(NonExistingKeyException e){
+			e.printStackTrace();
+		}
+		return res;
 	}
 	
 }

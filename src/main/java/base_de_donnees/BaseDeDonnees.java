@@ -4,6 +4,9 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map.Entry;
+
+import main.java.exception.NonExistingKeyException;
+
 import java.util.Set;
 
 /**
@@ -23,7 +26,7 @@ public class BaseDeDonnees implements BDD_Interface {
 		H.put(cle,valeur);
 	}
 
-	public Object get(Object cle) {
+	public Object get(Object cle) throws NonExistingKeyException {
 		return H.get(cle);
 	}
 
@@ -63,12 +66,12 @@ public class BaseDeDonnees implements BDD_Interface {
 		return H.values();
 	}
 
-	public void remove(Object cle) {
+	public void remove(Object cle) throws NonExistingKeyException {
 		H.remove(cle);
 	}
-/*
-	public boolean remove(Object cle, Object valeur) {
+
+	public boolean remove(Object cle, Object valeur) throws NonExistingKeyException {
 		return H.remove(cle,valeur);
 	}
-*/
+
 }
