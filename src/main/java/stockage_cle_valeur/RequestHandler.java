@@ -1,4 +1,4 @@
-package stockage_cle_valeur;
+package main.java.stockage_cle_valeur;
 
 import java.util.Hashtable;
 
