@@ -25,5 +25,5 @@ public interface BDD_Interface {
 	public Collection<Object> values();
 
 	public void remove(Object cle);
-	public boolean remove(Object cle, Object valeur);
+	//public boolean remove(Object cle, Object valeur);
 }

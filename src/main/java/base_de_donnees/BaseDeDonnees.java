@@ -13,7 +13,7 @@ public class BaseDeDonnees implements BDD_Interface {
 	public BaseDeDonnees(){
 		H = new Hashtable<Object,Object>();
 	}
-	
+
 	public void put(Object cle, Object valeur) {
 		H.put(cle,valeur);
 	}
@@ -61,9 +61,9 @@ public class BaseDeDonnees implements BDD_Interface {
 	public void remove(Object cle) {
 		H.remove(cle);
 	}
-
+/*
 	public boolean remove(Object cle, Object valeur) {
 		return H.remove(cle,valeur);
 	}
-
+*/
 }
