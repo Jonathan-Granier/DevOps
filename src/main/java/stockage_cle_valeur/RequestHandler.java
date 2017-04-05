@@ -16,7 +16,7 @@ public class RequestHandler {
 	 * Constructeur par defaut
 	 */
 	public RequestHandler(){
-		
+		this.BDD = null;
 	}
 	
 	/**
@@ -28,10 +28,10 @@ public class RequestHandler {
 	}
 
 	/**
-	 * Ajouter une BDD
-	 * @param BDD la BDD a laquelle se "brancher"
+	 * Change la BDD
+	 * @param BDD la nouvelle BDD a laquelle se "brancher"
 	 */
-	public void addBDD(BDD_Interface BDD){
+	public void changeBDD(BDD_Interface BDD){
 		this.BDD = BDD;
 	}
 	
