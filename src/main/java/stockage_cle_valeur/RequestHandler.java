@@ -1,21 +1,31 @@
 package main.java.stockage_cle_valeur;
 
-import java.util.Hashtable;
+import main.java.base_de_donnees.BDD_Interface;
 
 public class RequestHandler {
 
-	Hashtable<Integer,Object> H;
+	BDD_Interface BDD;
 	
 	public RequestHandler(){
-		H = new Hashtable<Integer,Object>();
+		
+	}
+	
+	public RequestHandler(BDD_Interface BDD){
+		this.BDD = BDD;
+	}
+	
+	public void addBDD(BDD_Interface BDD){
+		this.BDD = BDD;
 	}
 	
 	public void add(Integer cle, Object valeur){
 		System.out.println("Ajout de " + valeur.toString() + " avec la cle " + cle);
+		BDD.put(cle,valeur);
 	}
 	
 	public Object get(Integer cle){
 		System.out.println("Acces a " + cle);
-		return null;
+		return BDD.get(cle);
 	}
+	
 }
