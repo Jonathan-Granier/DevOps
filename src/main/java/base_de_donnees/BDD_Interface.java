@@ -5,6 +5,11 @@ import java.util.Enumeration;
 import java.util.Map.Entry;
 import java.util.Set;
 
+/**
+ * Classe d'interface de BDD, a ajouter au RequestHandler
+ * @author bizarda
+ * Interface similaire à Hashtable<Object,Object>
+ */
 public interface BDD_Interface {
 
 	public void put(Object cle, Object valeur);

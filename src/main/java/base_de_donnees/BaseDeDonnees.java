@@ -6,6 +6,11 @@ import java.util.Hashtable;
 import java.util.Map.Entry;
 import java.util.Set;
 
+/**
+ * Implementation de BDD_Interface, en Hashtable
+ * @author bizarda
+ *
+ */
 public class BaseDeDonnees implements BDD_Interface {
 
 	Hashtable<Object,Object> H;
