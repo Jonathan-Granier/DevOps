@@ -13,7 +13,7 @@ import java.util.Set;
  * @author bizarda
  * Interface similaire à Hashtable<Object,Object>
  */
-public interface BDD_Interface {
+public interface BDDInterface {
 
 	public void put(Object cle, Object valeur);
 	public Object get(Object cle) throws NonExistingKeyException;
@@ -33,5 +33,4 @@ public interface BDD_Interface {
 	public Collection<Object> values();
 
 	public void remove(Object cle) throws NonExistingKeyException;
-	public boolean remove(Object cle, Object valeur) throws NonExistingKeyException;
 }

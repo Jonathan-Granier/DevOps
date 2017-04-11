@@ -14,9 +14,9 @@ import java.util.Set;
  * @author bizarda
  *
  */
-public class BaseDeDonnees implements BDD_Interface {
+public class BaseDeDonnees implements BDDInterface {
 
-	Hashtable<Object,Object> H;
+	private Hashtable<Object,Object> H;
 
 	public BaseDeDonnees(){
 		H = new Hashtable<Object,Object>();
@@ -27,7 +27,11 @@ public class BaseDeDonnees implements BDD_Interface {
 	}
 
 	public Object get(Object cle) throws NonExistingKeyException {
-		return H.get(cle);
+		Object res = H.get(cle);
+		if(res == null)
+			throw new NonExistingKeyException();
+		else
+			return res;
 	}
 
 	public boolean contains(Object valeur) {
@@ -67,11 +71,9 @@ public class BaseDeDonnees implements BDD_Interface {
 	}
 
 	public void remove(Object cle) throws NonExistingKeyException {
-		H.remove(cle);
-	}
-
-	public boolean remove(Object cle, Object valeur) throws NonExistingKeyException {
-		return H.remove(cle,valeur);
+		Object res = H.remove(cle);
+		if(res == null)
+			throw new NonExistingKeyException();
 	}
 
 }
