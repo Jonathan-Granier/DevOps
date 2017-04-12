@@ -14,7 +14,7 @@ import java.net.Socket;
  *
  */
 
-public class Echange implements Runnable {
+public class Echange_Serveur implements Runnable {
 	
 	private Socket socket;
 	private InputStream in;
@@ -24,7 +24,7 @@ public class Echange implements Runnable {
 	private String data_emmision;
 	private boolean Maintient_connexion;
 	
-	public Echange(Socket socket)
+	public Echange_Serveur(Socket socket)
 	{
 		Maintient_connexion = true;
 		try {
