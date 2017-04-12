@@ -1,59 +1,63 @@
 package client.java.fichiers_client;
 
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import main.java.commande_structure.Request;
+
+/**
+ * Classe interface du client : envoi des requêtes
+ * @Author lavvsont
+ * 
+ */
 public class Client {
 
 	private final  ArrayList<Object> data = new ArrayList<Object>();
 	
 	private Socket socket; 
-	BufferedReader in;
-	PrintWriter out;
 
-
-	private int port;
+	private static int numReq = 0;
 	
 	public static void main(String[] args) {
 		//TODO - Appeler les fonctions de jon et faire des sexy moves
+		//Connection au serveur
+	
 		
+		System.out.println("PROJET DEVOPS - Client");
+		
+		//Entrée des requêtes sur la ligne de commande (boucle)
+		System.out.print(">");
+		
+		
+			//Parser la commande
+			//Si "quit" tout quitter
+			
+			
+			//Envoyer la cmd_struct au serveur
+			
+			
+			//attendre/recevoir une réponse
+			//traiter la réponse et afficher en fonction du résultat
+			
 		
 	}
-	
-	/*
-	private void connection(){
-		
-		try {
-			socket = new Socket(InetAddress.getLocalHost(),port);
-			in = new BufferedReader (new InputStreamReader (socket.getInputStream()));
-		
-		} catch (UnknownHostException e) {
 
-			e.printStackTrace();
-		} catch (IOException e) {
-
-			e.printStackTrace();
+	private Request parse_cmd(String cmd){
+		Request req = new Request();
+		
+		String delimiters = "[]+";
+		String[] vals = cmd.split(delimiters);
+		
+		if(vals.length != 3){
+			return null;
 		}
 		
+		
+		return req;
 	}
 	
-	private void deconnexion(){
-		
-		try {
-			socket.close();
-		} catch (IOException e) {
-
-			e.printStackTrace();
-		}
-		
-	}
-	*/
 	
 	private void fill_data(){
 		data.add(entier1);
