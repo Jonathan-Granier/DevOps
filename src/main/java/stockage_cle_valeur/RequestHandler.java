@@ -43,6 +43,7 @@ public class RequestHandler {
 	public Answer handleRequest(Request req){
 		Answer res = new Answer();
 		res.reqNumber = req.reqNumber;
+		res.data = null;
 		switch(req.op_code){
 		case get:
 			try {

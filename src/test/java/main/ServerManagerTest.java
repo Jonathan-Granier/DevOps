@@ -14,15 +14,11 @@ import java.util.ArrayList;
 /**
  * Test fonctionnel : verifie que les donnees sont coherentes pour le client
  */
-public class FunctionalTest{
+public class ServerManagerTest{
 	
 	private ServerManager svMgr;
 	
-	/**
-     * Create the test case
-     * @param testName name of the test case
-     */
-    public FunctionalTest(){
+    public ServerManagerTest(){
     }
     
     @Before
@@ -51,13 +47,12 @@ public class FunctionalTest{
 		svMgr.add(key, value);
         assertEquals(value,svMgr.get(key));
 	}
-    
+
     @Test(expected = NonExistingKeyException.class)
     public void test_WrongKey() throws NonExistingKeyException{
     	svMgr.add(42, 23);
     	svMgr.get(23);
     }
-	
 }
 
 
