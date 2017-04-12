@@ -32,19 +32,25 @@ public class FunctionalTest{
     }
 
 	@Test
-    public void test_AddGet() throws NonExistingKeyException{
-		svMgr.add(42, 23);
+	public void test_AddGet1() throws NonExistingKeyException{
+		helper_AddGet(42,23);
+	}
+	
+	@Test
+	public void test_AddGet2() throws NonExistingKeyException{
+		helper_AddGet(66,"Hello world !");
+	}
+
+	@Test
+    public void test_AddGet3() throws NonExistingKeyException{
 		svMgr.add(23, new ArrayList<String>());
-		svMgr.add(66, "Hello world !");
-    	
-        assertTrue(svMgr.get(23) instanceof ArrayList<?>);
         assertEquals(0,((ArrayList<?>)svMgr.get(23)).size());
-        
-        assertTrue(svMgr.get(42) instanceof Integer);
-        assertEquals(23,svMgr.get(42));
-        
-        assertEquals("Hello world !",svMgr.get(66));
     }
+	
+	private void helper_AddGet(Object key, Object value) throws NonExistingKeyException{
+		svMgr.add(key, value);
+        assertEquals(value,svMgr.get(key));
+	}
     
     @Test(expected = NonExistingKeyException.class)
     public void test_WrongKey() throws NonExistingKeyException{
