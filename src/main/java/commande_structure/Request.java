@@ -1,5 +1,10 @@
 package main.java.commande_structure;
 
+/**
+ * Classe structure pour les requetes au RequestHandler
+ * @author bouvigab
+ *
+ */
 public class Request {
 	
 	public enum opCode{

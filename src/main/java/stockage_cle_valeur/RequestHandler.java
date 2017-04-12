@@ -19,14 +19,27 @@ public class RequestHandler {
 	public RequestHandler(){	
 	}
 	
+	/**
+	 * Constructeur
+	 * @param server_manager le ServerManager auquel se "brancher"
+	 */
 	public RequestHandler(ServerManager server_manager){
 		this.server_manager = server_manager;
 	}
 	
+	/**
+	 * Change le ServerManager auquel on se "branche"
+	 * @param server_manager
+	 */
 	public void changeServerManager(ServerManager server_manager){
 		this.server_manager = server_manager;
 	}
 	
+	/**
+	 * Traite une requete
+	 * @param req la requete a traiter
+	 * @return le resultat de cette requete
+	 */
 	public Answer handleRequest(Request req){
 		Answer res = new Answer();
 		res.reqNumber = req.reqNumber;
