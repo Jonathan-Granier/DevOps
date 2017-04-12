@@ -1,6 +1,6 @@
 package main.java.commande_structure;
 
-public class CommandStructure {
+public class Request {
 	
 	public enum opCode{
 		setString,
@@ -12,7 +12,7 @@ public class CommandStructure {
 		list_remove,
 		remove
 	}
-	public opCode opCode;
+	public opCode op_code;
 	public String key;
 	public Object data;
 	public int reqNumber;

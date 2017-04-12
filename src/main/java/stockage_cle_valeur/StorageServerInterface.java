@@ -19,5 +19,5 @@ public interface StorageServerInterface {
 	public boolean containsKey(Object key);
 	public Object get(Object key) throws NonExistingKeyException;
 	public void put(Object key, Object elem);
-	public void remove(Object key);
+	public void remove(Object key) throws NonExistingKeyException;
 }

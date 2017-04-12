@@ -107,9 +107,11 @@ public class StorageServer implements StorageServerInterface{
 		values_usage_order.add(elem);
 	}
 
-	public void remove(Object key) {
+	public void remove(Object key) throws NonExistingKeyException{
 		H.remove(key);
 		int index_of_key = keys_usage_order.indexOf(key);
+		if(index_of_key == -1)
+			throw new NonExistingKeyException();
 		keys_usage_order.remove(index_of_key);
 		values_usage_order.remove(index_of_key);
 	}

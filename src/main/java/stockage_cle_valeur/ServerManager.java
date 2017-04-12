@@ -115,6 +115,15 @@ public class ServerManager {
 			return BDD.containsKey(cle);
 		}
 	}
+	
+	public void remove(Object key) throws NonExistingKeyException {
+		if(!servers.get(0).containsKey(key))
+			if(!BDD.containsKey(key))
+				throw new NonExistingKeyException();
+		servers.get(0).remove(key);
+		BDD_write_access ++;
+		BDD.remove(key);
+	}
 
 	/**
 	 * Renvoie le nombre d'acces en lecture a la BDD
