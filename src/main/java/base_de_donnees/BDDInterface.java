@@ -9,7 +9,7 @@ import main.java.exception.NonExistingKeyException;
 import java.util.Set;
 
 /**
- * Classe d'interface de BDD, a ajouter au RequestHandler
+ * Classe d'interface de BDD, a ajouter au ServerManager
  * @author bizarda
  * Interface similaire à Hashtable<Object,Object>
  */

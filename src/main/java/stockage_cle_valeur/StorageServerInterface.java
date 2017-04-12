@@ -3,7 +3,7 @@ package main.java.stockage_cle_valeur;
 import main.java.exception.NonExistingKeyException;
 
 /**
- * Interface pour les serveurs de stockage servant de cache au RequestHandler pour la BDD
+ * Interface pour les serveurs de stockage servant de cache au ServerManager pour la BDD
  * @author bizarda
  *
  */

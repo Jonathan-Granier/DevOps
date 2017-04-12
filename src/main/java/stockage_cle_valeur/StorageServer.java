@@ -7,7 +7,7 @@ import java.util.Random;
 import main.java.exception.NonExistingKeyException;
 
 /**
- * Serveur de stockage servant de cache au RequestHandler
+ * Serveur de stockage servant de cache au ServerManager
  * @author bizarda
  *
  */
