@@ -1,4 +1,4 @@
-package serveur.java.cache_BDD;
+package main.java.cache_BDD;
 
 import java.util.Hashtable;
 
