@@ -7,7 +7,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		RequestHandler RqHdl = new RequestHandler();
-		RqHdl.addBDD(new BaseDeDonnees());
+		RqHdl.changeBDD(new BaseDeDonnees());
 		RqHdl.add(42, 23);
 		System.out.println("Bonjour, ça doit faire 23 : " + RqHdl.get(42));
 	}
