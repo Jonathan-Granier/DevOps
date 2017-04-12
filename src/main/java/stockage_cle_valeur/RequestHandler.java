@@ -6,7 +6,7 @@ import main.java.base_de_donnees.BDDInterface;
 import main.java.exception.NonExistingKeyException;
 
 /**
- * TODO
+ * Classe centrale de gestion des serveurs de cache devant la BDD
  * @author bizarda
  *
  */
@@ -59,10 +59,13 @@ public class RequestHandler {
 	 * @param cle une cle
 	 * @param valeur l'element a associer a la cle
 	 */
-	public void add(Integer cle, Object valeur){
+	public void add(Object cle, Object valeur){
 		System.out.println("Ajout de " + valeur.toString() + " avec la cle " + cle);
+		if(servers.get(0).isFull())
+			servers.get(0).evinceLRU();
+		servers.get(0).put(cle,valeur);
 		BDD.put(cle,valeur);
-		BDD_read_access ++;
+		BDD_write_access ++;
 	}
 	
 	/**
@@ -70,17 +73,47 @@ public class RequestHandler {
 	 * @param cle
 	 * @return l'element associe a cle
 	 */
-	public Object get(Integer cle){
+	public Object get(Object cle) throws NonExistingKeyException{
 		System.out.println("Acces a " + cle);
 		Object res = null;
-		try{
+		try {
+			res = servers.get(0).get(cle);
+			return res;
+		} catch (NonExistingKeyException ignored) {
 			res = BDD.get(cle);
-			BDD_write_access ++;
+			BDD_read_access ++;
+			return res;
 		}
-		catch(NonExistingKeyException e){
-			e.printStackTrace();
+	}
+	
+	/**
+	 * Renvoie vrai ssi l'element est dans la BDD
+	 * @param valeur l'element a tester
+	 * @return vrai ssi valeur est dans la BDD
+	 */
+	public boolean contains(Object valeur){
+		if(servers.get(0).contains(valeur)){
+			return true;
 		}
-		return res;
+		else{
+			BDD_read_access ++;
+			return BDD.contains(valeur);
+		}
+	}
+	
+	/**
+	 * Renvoie vrai ssi la cle est dans la BDD
+	 * @param cle la cle a tester
+	 * @return vrai ssi cle est dans la BDD
+	 */
+	public boolean containsKey(Object cle){
+		if(servers.get(0).containsKey(cle)){
+			return true;
+		}
+		else{
+			BDD_read_access ++;
+			return BDD.containsKey(cle);
+		}
 	}
 
 	/**

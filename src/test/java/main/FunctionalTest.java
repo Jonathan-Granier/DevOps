@@ -3,6 +3,7 @@ package test.java.main;
 import org.junit.*;
 
 import main.java.base_de_donnees.BaseDeDonnees;
+import main.java.exception.NonExistingKeyException;
 import main.java.stockage_cle_valeur.RequestHandler;
 import main.java.stockage_cle_valeur.StorageServer;
 
@@ -31,23 +32,24 @@ public class FunctionalTest{
     }
 
 	@Test
-    public void test_add_get(){
+    public void test_AddGet() throws NonExistingKeyException{
     	rqHdl.add(42, 23);
     	rqHdl.add(23, new ArrayList<String>());
     	rqHdl.add(66, "Hello world !");
     	
         assertTrue(rqHdl.get(23) instanceof ArrayList<?>);
-        assertTrue(((ArrayList<?>)rqHdl.get(23)).size() == 0);
+        assertEquals(0,((ArrayList<?>)rqHdl.get(23)).size());
         
         assertTrue(rqHdl.get(42) instanceof Integer);
-        assertTrue((Integer)rqHdl.get(42) == 23);
+        assertEquals(23,rqHdl.get(42));
         
-        assertTrue(rqHdl.get(66).equals("Hello world !"));
+        assertEquals("Hello world !",rqHdl.get(66));
     }
     
-    @Test
-    public void test_contains(){
-    	
+    @Test(expected = NonExistingKeyException.class)
+    public void test_WrongKey() throws NonExistingKeyException{
+    	rqHdl.add(42, 23);
+    	rqHdl.get(23);
     }
 	
 }
