@@ -20,8 +20,8 @@ public class Echange_Serveur implements Runnable {
 	private InputStream in;
     private OutputStream out;
 	
-	private String data_reception;
-	private String data_emmision;
+	private byte[] data_reception;
+	private byte[] data_emmision;
 	private boolean Maintient_connexion;
 	
 	public Echange_Serveur(Socket socket)
@@ -64,6 +64,7 @@ public class Echange_Serveur implements Runnable {
 	 */
 	private void reception(){
 		//TODO recepetion , gaby
+		
 		
 	}
 	
