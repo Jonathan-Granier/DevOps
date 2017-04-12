@@ -11,18 +11,18 @@ LAWSON Thibault
 
 
 
-TODO List :
-Le client (Très simple)
-La connexion client - serveur
-Opération complexe
-Multithread sur le serveur
-Partitionnement
-Cache LRU
-Gestion des permissions
-
-TEST !
-TEST !
-RE TEST !
-Docker
+TODO List :  
+Le client (Très simple)  
+La connexion client - serveur  
+Opération complexe  
+Multithread sur le serveur  
+Partitionnement  
+Cache LRU  
+Gestion des permissions  
+   
+TEST !  
+TEST !  
+RE TEST !  
+Docker  
 
 
