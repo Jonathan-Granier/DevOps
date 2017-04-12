@@ -1,6 +1,6 @@
 package main.java.commande_structure;
 
-public class structure_commande {
+public class CommandStructure {
 	
 	public enum opCode{
 		setString,
