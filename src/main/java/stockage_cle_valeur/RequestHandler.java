@@ -1,6 +1,7 @@
 package main.java.stockage_cle_valeur;
 
 import main.java.commande_structure.Answer;
+import main.java.commande_structure.Answer.returnCode;
 import main.java.commande_structure.Request;
 import main.java.exception.NonExistingKeyException;
 
@@ -16,7 +17,7 @@ public class RequestHandler {
 	/**
 	 * Constructeur par défaut
 	 */
-	public RequestHandler(){	
+	public RequestHandler(){
 	}
 	
 	/**
@@ -41,29 +42,46 @@ public class RequestHandler {
 	 * @return le resultat de cette requete
 	 */
 	public Answer handleRequest(Request req){
-		Answer res = new Answer();
-		res.reqNumber = req.reqNumber;
-		res.data = null;
+		System.out.println("Traitment de la requête n°" + req.reqNumber);
+		Answer ans = new Answer();
+		ans.reqNumber = req.reqNumber;
+		ans.data = null;
 		switch(req.op_code){
 		case get:
 			try {
-				res.data = server_manager.get(req.key);
+				ans.data = server_manager.get(req.key);
 			} catch (NonExistingKeyException e) {
-				res.return_code = Answer.returnCode.NonExistingKey;
-				return res;
+				ans.return_code = returnCode.NonExistingKey;
+				return ans;
 			}
 			break;
 		case remove:
 			try {
 				server_manager.remove(req.key);
 			} catch (NonExistingKeyException e) {
-				res.return_code = Answer.returnCode.NonExistingKey;
-				return res;
+				ans.return_code = returnCode.NonExistingKey;
+				return ans;
 			}
 			break;
 		case setInt:
-		case setObject:
+			if(! (req.data instanceof Integer)){
+				ans.return_code = returnCode.WrongDataType;
+				return ans;
+			}
+			server_manager.add(req.key, req.data);
+			break;
 		case setString:
+			if(! (req.data instanceof String)){
+				ans.return_code = returnCode.WrongDataType;
+				return ans;
+			}
+			server_manager.add(req.key, req.data);
+			break;
+		case setObject:
+			if((req.data instanceof Integer) || (req.data instanceof String)){
+				ans.return_code = returnCode.WrongDataType;
+				return ans;
+			}
 			server_manager.add(req.key, req.data);
 			break;
 		case increment:
@@ -75,7 +93,7 @@ public class RequestHandler {
 		default:
 			break;
 		}
-		res.return_code = Answer.returnCode.OK;
-		return res;
+		ans.return_code = returnCode.OK;
+		return ans;
 	}
 }

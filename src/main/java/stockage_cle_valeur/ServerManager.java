@@ -60,7 +60,6 @@ public class ServerManager {
 	 * @param valeur l'element a associer a la cle
 	 */
 	public void add(Object cle, Object valeur){
-		System.out.println("Ajout de " + valeur.toString() + " avec la cle " + cle);
 		if(servers.get(0).isFull())
 			servers.get(0).evinceLRU();
 		servers.get(0).put(cle,valeur);
@@ -74,7 +73,6 @@ public class ServerManager {
 	 * @return l'element associe a cle
 	 */
 	public Object get(Object cle) throws NonExistingKeyException{
-		System.out.println("Acces a " + cle);
 		Object res = null;
 		try {
 			res = servers.get(0).get(cle);

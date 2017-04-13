@@ -9,7 +9,8 @@ public class Answer {
 
 	public enum returnCode{
 		OK,
-		NonExistingKey
+		NonExistingKey,
+		WrongDataType
 	}
 	
 	public returnCode return_code;
