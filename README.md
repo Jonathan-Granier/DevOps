@@ -8,7 +8,9 @@ BOUVIER-DENOIX Gabriel
 GRANIER Jonathan  
 LAWSON Thibault  
 
-
+A DISCUTER :  
+Est-ce necessaire d'avoir le type du set dans Request ?  
+Autant juste faire set tout court
 
 
 TODO List :  
