@@ -3,6 +3,7 @@ package main.java.stockage_cle_valeur;
 import java.util.ArrayList;
 
 import main.java.base_de_donnees.BDDInterface;
+import main.java.exception.BDDNotFoundException;
 import main.java.exception.NonExistingKeyException;
 
 /**
@@ -12,6 +13,8 @@ import main.java.exception.NonExistingKeyException;
  */
 public class ServerManager {
 
+	// TODO gerer plusieurs serveurs
+	
 	private BDDInterface BDD;
 	private ArrayList<StorageServerInterface> servers;
 	private int BDD_read_access, BDD_write_access;
@@ -28,11 +31,12 @@ public class ServerManager {
 	 * @param BDD la BDD a laquelle se "brancher"
 	 */
 	public ServerManager(BDDInterface BDD){
-		this.BDD = BDD;
 		init();
+		this.BDD = BDD;
 	}
 	
 	private void init(){
+		BDD = null;
 		servers = new ArrayList<StorageServerInterface>();
 		BDD_read_access = 0;
 		BDD_write_access = 0;
@@ -59,27 +63,34 @@ public class ServerManager {
 	 * @param cle une cle
 	 * @param valeur l'element a associer a la cle
 	 */
-	public void add(Object cle, Object valeur){
-		if(servers.get(0).isFull())
-			servers.get(0).evinceLRU();
-		servers.get(0).put(cle,valeur);
+	public void add(Object cle, Object valeur) throws BDDNotFoundException{
+		checkBDD();
+		if(!servers.isEmpty()){
+			if(servers.get(0).isFull())
+				servers.get(0).evinceLRU();
+			servers.get(0).put(cle,valeur);
+		}
 		BDD.put(cle,valeur);
 		BDD_write_access ++;
 	}
-	
+
 	/**
 	 * Recuperer l'element associe a une cle
 	 * @param cle
 	 * @return l'element associe a cle
 	 */
-	public Object get(Object cle) throws NonExistingKeyException{
+	public Object get(Object cle) throws NonExistingKeyException, BDDNotFoundException{
+		checkBDD();
 		Object res = null;
 		try {
 			res = servers.get(0).get(cle);
 			return res;
-		} catch (NonExistingKeyException ignored) {
+		}
+		catch (Exception ignored) {		// Might be NonExistingKeyException or NullPointerException, in both cases search the BDD
 			res = BDD.get(cle);
 			BDD_read_access ++;
+			if(res == null)
+				throw new NonExistingKeyException();
 			return res;
 		}
 	}
@@ -89,8 +100,9 @@ public class ServerManager {
 	 * @param valeur l'element a tester
 	 * @return vrai ssi valeur est dans la BDD
 	 */
-	public boolean contains(Object valeur){
-		if(servers.get(0).contains(valeur)){
+	public boolean contains(Object valeur) throws BDDNotFoundException{
+		checkBDD();
+		if(!servers.isEmpty() && servers.get(0).contains(valeur)){
 			return true;
 		}
 		else{
@@ -104,8 +116,9 @@ public class ServerManager {
 	 * @param cle la cle a tester
 	 * @return vrai ssi cle est dans la BDD
 	 */
-	public boolean containsKey(Object cle){
-		if(servers.get(0).containsKey(cle)){
+	public boolean containsKey(Object cle) throws BDDNotFoundException{
+		checkBDD();
+		if(!servers.isEmpty() && servers.get(0).containsKey(cle)){
 			return true;
 		}
 		else{
@@ -114,13 +127,19 @@ public class ServerManager {
 		}
 	}
 	
-	public void remove(Object key) throws NonExistingKeyException {
-		if(!servers.get(0).containsKey(key))
-			if(!BDD.containsKey(key))
-				throw new NonExistingKeyException();
-		servers.get(0).remove(key);
-		BDD_write_access ++;
-		BDD.remove(key);
+	public void remove(Object key) throws NonExistingKeyException, BDDNotFoundException {
+		checkBDD();
+		if(!BDD.containsKey(key))
+			throw new NonExistingKeyException();
+		else{
+			if(!servers.isEmpty()){
+				if(servers.get(0).containsKey(key)){
+					servers.get(0).remove(key);
+				}
+			}
+			BDD_write_access ++;
+			BDD.remove(key);
+		}
 	}
 
 	/**
@@ -137,5 +156,10 @@ public class ServerManager {
 	 */
 	public int getBDDWriteAccess(){
 		return BDD_write_access;
+	}
+	
+	private void checkBDD() throws BDDNotFoundException {
+		if(BDD == null)
+			throw new BDDNotFoundException();
 	}
 }

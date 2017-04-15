@@ -3,6 +3,7 @@ package main.java.stockage_cle_valeur;
 import main.java.commande_structure.Answer;
 import main.java.commande_structure.Answer.returnCode;
 import main.java.commande_structure.Request;
+import main.java.exception.BDDNotFoundException;
 import main.java.exception.NonExistingKeyException;
 
 /**
@@ -15,9 +16,10 @@ public class RequestHandler {
 	private ServerManager server_manager;
 	
 	/**
-	 * Constructeur par défaut
+	 * Constructeur par defaut
 	 */
 	public RequestHandler(){
+		this.server_manager = null;
 	}
 	
 	/**
@@ -41,8 +43,8 @@ public class RequestHandler {
 	 * @param req la requete a traiter
 	 * @return le resultat de cette requete
 	 */
-	public Answer handleRequest(Request req){
-		System.out.println("Traitment de la requête n°" + req.reqNumber);
+	public Answer handleRequest(Request req) throws BDDNotFoundException{
+		System.out.println("Traitment de la requete n�" + req.reqNumber);
 		Answer ans = new Answer();
 		ans.reqNumber = req.reqNumber;
 		ans.data = null;
