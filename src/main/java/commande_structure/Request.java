@@ -7,7 +7,7 @@ package main.java.commande_structure;
  */
 public class Request {
 	
-	public enum opCode{
+	public enum opCode{	// Il y a donc deux sources de opcode (dans interface serveur) redondant probablement?
 		setString,
 		setInt,
 		setObject,
@@ -20,5 +20,6 @@ public class Request {
 	public opCode op_code;
 	public String key;
 	public Object data;
+	public byte[] data_as_byte;
 	public int reqNumber;
 }
