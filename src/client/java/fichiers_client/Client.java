@@ -1,9 +1,7 @@
 package client.java.fichiers_client;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.Socket;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -18,16 +16,12 @@ import main.java.interfaceserveur.operationCode;
  * 
  */
 public class Client {
-
-	private final  ArrayList<Object> data = new ArrayList<Object>();
 	
-	private Socket socket; 
-	
-	public static void main(String[] args) throws UnknownCmdException {
+	public static void main(String[] args) {
 		//Connection au serveur
 		Echange_Client share = null;
 		String cmd;
-		Request req;
+		Request req = new Request();
 		Answer ans;
 		Scanner input = new Scanner(System.in);
 		try {
@@ -48,12 +42,15 @@ public class Client {
 			if(cmd.equals("exit"))
 				System.exit(0);
 			
-			req = parse_cmd(cmd);
+			try {
+				req = parse_cmd(cmd);
+			} catch (UnknownCmdException e1) {
+				e1.printStackTrace();
+			}
 		
 			try {
 				ans = share.faire_un_echange(req);
 			} catch (ClassNotFoundException | IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 				
@@ -81,38 +78,32 @@ public class Client {
 		req.key = vals[1];
 		
 		switch (vals[0]){
-			case "setString" :
+			case "set" :
+			case "SET" :
 				if(vals.length != 3){
 					return null;
 				}
-				req.op_code = Request.opCode.setString;
-				req.data = vals[2];
-				break;
-			
-			case "setInt" :
-				if(vals.length != 3){
-					return null;
-				}
-				req.op_code = Request.opCode.setInt;
-				req.data = Integer.parseInt(vals[2]);
-				break;
-			
-			case "getAtIndex" :
-				if(vals.length != 3){
-					return null;
-				}
-				req.op_code = Request.opCode.get_elem_of_list_at_index;
-				req.data = vals[2];
+				req.op_code = Request.opCode.set;
+				req.data = assign_data(vals[2]);
 				break;
 			
 			case "get" :
+			case "GET" :
 				if(vals.length != 2){
 					return null;
 				}
 				req.op_code = Request.opCode.get;
 				req.data = null;
 				break;
-			
+
+			case "getAtIndex" :
+				if(vals.length != 3){
+					return null;
+				}
+				req.op_code = Request.opCode.get_elem_of_list_at_index;
+				req.data = assign_data(vals[2]);
+				break;
+				
 			case "increment" :
 				if(vals.length != 2){
 					return null;
@@ -126,7 +117,7 @@ public class Client {
 					return null;
 				}
 				req.op_code = Request.opCode.list_add;
-				req.data = vals[2];
+				req.data = assign_data(vals[2]);
 				break;
 			
 			case "list_remove" :
@@ -134,15 +125,15 @@ public class Client {
 					return null;
 				}
 				req.op_code = Request.opCode.list_remove;
-				req.data = vals[2];
+				req.data = assign_data(vals[2]);
 				break;
 			
 			case "remove" :
-				if(vals.length != 3){
+				if(vals.length != 2){
 					return null;
 				}
 				req.op_code = Request.opCode.remove;
-				req.data = vals[2];
+				req.data = null;
 				break;
 			default :
 				throw new UnknownCmdException();
@@ -154,28 +145,46 @@ public class Client {
 	}
 	
 	/**
-	 * Rempli une liste de données pré-remplies pour les tests
+	 * Fonction qui assigne une data à la requête.
+	 * Si la donnée commence par un '-' alors on assignera une donnée pré-remplie à la data
+	 * @param val la donnée entrée au clavier par l'utilisateur
+	 * @return la donnée qui sera envoyée en requête
 	 */
-	private void fill_data(){
-		data.add(entier1);
-		data.add(entier2);
-		data.add(chaine1);
-		data.add(chaine2);
-		
-		data.add(listeEntier);
-		data.add(listeString);
+	private static Serializable assign_data(String val){
+		if(val.startsWith("-")){
+			switch(val.substring(1)){
+			case "entier1" :
+				return (Serializable) entier1;
+			case "entier2" :
+				return (Serializable) entier2;
+			case "chaine1" :
+				return (Serializable) chaine1;
+			case "chaine2" :
+				return (Serializable) chaine2;
+			case "listeEntier" :
+				return (Serializable) listeEntier;
+			case "listeString" :
+				return (Serializable) listeString;
+			case "listeVide" :
+				return (Serializable) listeVide;
+			default :
+				return val;
+			}
+		}
+			
+		return val;
 	}
 	
-	
 	/////////////////////// OBJETS PRE-REMPLIS ///////////////////////
-	Object entier1 = new Integer(2);
-	Object entier2 = new Integer(42424242);
+	static Object entier1 = new Integer(2);
+	static Object entier2 = new Integer(42424242);
 	
-	Object chaine1 = new String("Bonjour");
-	Object chaine2 = new String("Coucou comment ca va?");
+	static Object chaine1 = new String("Bonjour");
+	static Object chaine2 = new String("Coucou comment ca va?");
 	
-	Object listeEntier = new ArrayList<Integer>().add(12);
+	static Object listeEntier = new ArrayList<Integer>().add(12);
 
-	Object listeString = new ArrayList<String>().add("chaine de caracteres");
-	
+	static Object listeString = new ArrayList<String>().add("chaine de caracteres");
+
+	static Object listeVide = new ArrayList<Object>();
 }

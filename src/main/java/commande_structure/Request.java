@@ -12,8 +12,7 @@ import main.java.interfaceserveur.operationCode;
 public class Request implements Serializable {
 	
 	public enum opCode{	// Il y a donc deux sources de opcode (dans interface serveur) redondant probablement?
-		setString,
-		setInt,
+		set,
 		get,
 		get_elem_of_list_at_index,
 		increment,
@@ -30,8 +29,6 @@ public class Request implements Serializable {
 		super();
 	}
 	
-	
-	
 	public Request(opCode op_code, String key, Serializable data, int reqNumber) {
 		super();
 		this.op_code = op_code;
@@ -40,36 +37,4 @@ public class Request implements Serializable {
 		this.reqNumber = reqNumber;
 	}
 
-
-
-	public static opCode opcode_from_char(char input){
-		switch(input){
-		case operationCode.increment:
-			return Request.opCode.increment;
-			
-		case operationCode.get:
-			return Request.opCode.get;
-			
-		case operationCode.list_add:
-			return Request.opCode.list_add;
-			
-		case operationCode.list_remove:
-			return Request.opCode.list_remove;
-			
-		case operationCode.remove:
-			return Request.opCode.remove;
-			
-		case operationCode.setInt:
-			return Request.opCode.setInt;
-			
-		case operationCode.get_elem_of_list_at_index :
-			return Request.opCode.get_elem_of_list_at_index;
-			
-		case operationCode.setString:
-			return Request.opCode.setString;
-			
-		default:
-			return Request.opCode.get;
-		}
-	}
 }

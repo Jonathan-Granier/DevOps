@@ -67,15 +67,8 @@ public class RequestHandler {
 				return ans;
 			}
 			break;
-		case setInt:
-			if(! (req.data instanceof Integer)){
-				ans.return_code = returnCode.WrongDataType;
-				return ans;
-			}
-			server_manager.add(req.key, req.data);
-			break;
-		case setString:
-			if(! (req.data instanceof String)){
+		case set:
+			if(! (req.data instanceof Integer) || ! (req.data instanceof String)){
 				ans.return_code = returnCode.WrongDataType;
 				return ans;
 			}

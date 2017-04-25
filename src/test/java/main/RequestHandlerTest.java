@@ -44,12 +44,12 @@ public class RequestHandlerTest{
 
 	@Test
 	public void test_setInt() throws BDDNotFoundException{
-		helper_set(opCode.setInt,"Reponse a la vie, l'univers et le reste",42);
+		helper_set(opCode.set,"Reponse a la vie, l'univers et le reste",42);
 	}
 
 	@Test
 	public void test_setString() throws BDDNotFoundException{
-		helper_set(opCode.setString,"Bonjour le monde","Hello world !");
+		helper_set(opCode.set,"Bonjour le monde","Hello world !");
 	}
 		
 	private void helper_set(opCode code, String key, Object data) throws BDDNotFoundException{
@@ -60,16 +60,6 @@ public class RequestHandlerTest{
 		Answer ans = rqHdl.handleRequest(req);
 		assertEquals(returnCode.OK,ans.return_code);
 		assertEquals(reqNum,ans.reqNumber);
-	}
-	
-	@Test
-	public void test_setInt_wrongType() throws BDDNotFoundException{
-		helper_set_wrongType(opCode.setInt,"Est-ce un entier ?","Ce n'est pas un entier");
-	}
-	
-	@Test
-	public void test_setString_wrongType() throws BDDNotFoundException{
-		helper_set_wrongType(opCode.setString,"Est-ce une chaine de caracteres ?",false);
 	}
 		
 	private void helper_set_wrongType(opCode code, String key, Object data) throws BDDNotFoundException{
@@ -84,12 +74,12 @@ public class RequestHandlerTest{
 
 	@Test
 	public void test_setGetInt() throws BDDNotFoundException{
-		helper_setGet(opCode.setInt,"1",42);
+		helper_setGet(opCode.set,"1",42);
 	}
 	
 	@Test
 	public void test_setGetSrting() throws BDDNotFoundException{
-		helper_setGet(opCode.setString,"2","oui");
+		helper_setGet(opCode.set,"2","oui");
 	}
 		
 	private void helper_setGet(opCode code, String key, Serializable data) throws BDDNotFoundException{
