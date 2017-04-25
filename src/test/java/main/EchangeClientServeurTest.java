@@ -2,6 +2,9 @@ package test.java.main;
 
 import org.junit.*;
 
+import main.java.commande_structure.Answer;
+import main.java.commande_structure.Request;
+
 import static org.junit.Assert.*;
 
 
@@ -12,9 +15,16 @@ import static org.junit.Assert.*;
  */
 
 public class EchangeClientServeurTest {
+	
+	public Request Send_Request;
+	public Request Rcv_Request;
+	
+	public Answer Send_Answer;
+	public Answer Rcv_Answer;
+	
 	@Before
 	public void init(){
-    
+		
     }
 	
 	
@@ -24,6 +34,11 @@ public class EchangeClientServeurTest {
 	@Test
 	public void test_ClientToServer_Traduction_1()
 	{
+		
+		
+		
+		
+		
 		assertTrue(true);
 	}
 	
