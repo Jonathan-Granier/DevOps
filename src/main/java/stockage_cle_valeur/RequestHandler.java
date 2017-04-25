@@ -81,12 +81,8 @@ public class RequestHandler {
 			}
 			server_manager.add(req.key, req.data);
 			break;
-		case setObject:
-			if((req.data instanceof Integer) || (req.data instanceof String)){
-				ans.return_code = returnCode.WrongDataType;
-				return ans;
-			}
-			server_manager.add(req.key, req.data);
+		case get_elem_of_list_at_index:
+			//TODO
 			break;
 		case increment:
 			break;

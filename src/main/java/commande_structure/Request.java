@@ -14,8 +14,8 @@ public class Request implements Serializable {
 	public enum opCode{	// Il y a donc deux sources de opcode (dans interface serveur) redondant probablement?
 		setString,
 		setInt,
-		setObject,
 		get,
+		get_elem_of_list_at_index,
 		increment,
 		list_add,
 		list_remove,
@@ -62,11 +62,11 @@ public class Request implements Serializable {
 		case operationCode.setInt:
 			return Request.opCode.setInt;
 			
-		case operationCode.setObject:
-			return Request.opCode.setObject;
+		case operationCode.get_elem_of_list_at_index :
+			return Request.opCode.get_elem_of_list_at_index;
 			
 		case operationCode.setString:
-			return Request.opCode.setString;//  8
+			return Request.opCode.setString;
 			
 		default:
 			return Request.opCode.get;

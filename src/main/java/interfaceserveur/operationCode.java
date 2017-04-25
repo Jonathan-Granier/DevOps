@@ -7,7 +7,7 @@ public abstract class operationCode {
 	public static int reqNumber =			0;
 	public final static char 	setInt=		1;
 	public final static char	setString=	2;
-	public final static char	setObject=	3;
+	public final static char	get_elem_of_list_at_index =	3;
 	public final static char	get=		4;
 	public final static char 	increment= 	5;
 	public final static char 	list_add=	6;
@@ -33,8 +33,8 @@ public abstract class operationCode {
 		case setInt:
 			return setInt;
 			
-		case setObject:
-			return setObject;
+		case get_elem_of_list_at_index:
+			return get_elem_of_list_at_index;
 			
 		case get:
 			return get;

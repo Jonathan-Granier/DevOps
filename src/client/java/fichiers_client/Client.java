@@ -10,6 +10,7 @@ import java.util.Scanner;
 import client.java.echange_client.Echange_Client;
 import main.java.commande_structure.Answer;
 import main.java.commande_structure.Request;
+import main.java.interfaceserveur.operationCode;
 
 /**
  * Classe interface du client : envoi des requêtes
@@ -21,10 +22,8 @@ public class Client {
 	private final  ArrayList<Object> data = new ArrayList<Object>();
 	
 	private Socket socket; 
-
-	private static int numReq = 0;
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws UnknownCmdException {
 		//Connection au serveur
 		Echange_Client share = null;
 		String cmd;
@@ -53,9 +52,10 @@ public class Client {
 		
 			try {
 				ans = share.faire_un_echange(req);
-			} catch (IOException e) {
+			} catch (ClassNotFoundException | IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}	
+			}
 				
 			//TODO - traiter la réponse et afficher en fonction du résultat
 			
@@ -63,7 +63,13 @@ public class Client {
 		
 	}
 
-	private static Request parse_cmd(String cmd){
+	/**
+	 * Parse l'entrée du client et rempli une structure request en fonction
+	 * @param cmd l'input du client
+	 * @return la requete correspondante
+	 * @throws UnknownCmdException 
+	 */
+	private static Request parse_cmd(String cmd) throws UnknownCmdException{
 		Request req = new Request();
 		
 		String delimiters = "[]+";
@@ -91,11 +97,11 @@ public class Client {
 				req.data = Integer.parseInt(vals[2]);
 				break;
 			
-			case "setObject" :
+			case "getAtIndex" :
 				if(vals.length != 3){
 					return null;
 				}
-				req.op_code = Request.opCode.setObject;
+				req.op_code = Request.opCode.get_elem_of_list_at_index;
 				req.data = vals[2];
 				break;
 			
@@ -139,17 +145,17 @@ public class Client {
 				req.data = vals[2];
 				break;
 			default :
-				//Unknown CMD exception
-				return null;
+				throw new UnknownCmdException();
 		}
 		
-		req.reqNumber = numReq;
-		numReq++;
+		req.reqNumber = operationCode.reqNumber();
 		
 		return req;
 	}
 	
-	
+	/**
+	 * Rempli une liste de données pré-remplies pour les tests
+	 */
 	private void fill_data(){
 		data.add(entier1);
 		data.add(entier2);
@@ -163,7 +169,7 @@ public class Client {
 	
 	/////////////////////// OBJETS PRE-REMPLIS ///////////////////////
 	Object entier1 = new Integer(2);
-	Object entier2 = new Integer(42);
+	Object entier2 = new Integer(42424242);
 	
 	Object chaine1 = new String("Bonjour");
 	Object chaine2 = new String("Coucou comment ca va?");
