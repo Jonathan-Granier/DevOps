@@ -1,15 +1,23 @@
 package main.java.interfaceserveur;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 
 import main.java.commande_structure.*;
-
+@Deprecated
 public abstract class reqDecoder {
-	
-	public static main.java.commande_structure.Request reqDecode(InputStream in) throws IOException
+
+	public static Request reqDecode(InputStream in) throws IOException, ClassNotFoundException
 	{
-		
-		byte[] input= new byte[operationCode.header_length];
+		ObjectInputStream in_object = new ObjectInputStream(in);
+		Object object_lu = in_object.readObject();
+		Request req = null;
+		if(object_lu instanceof Request)//TODO check if this work
+			req = (Request) object_lu;
+		return req;
+			
+		// OLD CODE. Where we used to code/decode by ourself
+		/*byte[] input= new byte[operationCode.header_length];
 		int read= in.read(input, 0, operationCode.header_length);
 		
 		if(read < operationCode.header_length)
@@ -36,8 +44,7 @@ public abstract class reqDecoder {
 		
 		int dataLen = operationCode.int_from_bytebuffer(input, offset);			// Get DATA
 		offset += operationCode.int_length;
-		
 		return request;
-		
+		*/
 	}
 }

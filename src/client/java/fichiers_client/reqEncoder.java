@@ -1,10 +1,14 @@
 package client.java.fichiers_client;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 
 import main.java.commande_structure.Request;
 import main.java.interfaceserveur.operationCode;
 
+@Deprecated
 public abstract class reqEncoder {
 	
 	//Redondant si Answer/request serializable?
