@@ -51,12 +51,7 @@ public class RequestHandlerTest{
 	public void test_setString() throws BDDNotFoundException{
 		helper_set(opCode.setString,"Bonjour le monde","Hello world !");
 	}
-	
-	@Test
-	public void test_setObject() throws BDDNotFoundException{
-		helper_set(opCode.setObject,"Un objet",true);
-	}
-	
+		
 	private void helper_set(opCode code, String key, Object data) throws BDDNotFoundException{
 		req.reqNumber = reqNum;
 		req.op_code = code;
@@ -76,12 +71,7 @@ public class RequestHandlerTest{
 	public void test_setString_wrongType() throws BDDNotFoundException{
 		helper_set_wrongType(opCode.setString,"Est-ce une chaine de caracteres ?",false);
 	}
-	
-	@Test
-	public void test_setObject_wrongType() throws BDDNotFoundException{
-		helper_set_wrongType(opCode.setObject,"Let's fool rqHdl",666);
-	}
-	
+		
 	private void helper_set_wrongType(opCode code, String key, Object data) throws BDDNotFoundException{
 		req.reqNumber = reqNum;
 		req.op_code = code;
@@ -101,12 +91,7 @@ public class RequestHandlerTest{
 	public void test_setGetSrting() throws BDDNotFoundException{
 		helper_setGet(opCode.setString,"2","oui");
 	}
-	
-	@Test
-	public void test_setGetObject() throws BDDNotFoundException{
-		helper_setGet(opCode.setObject,"3",new Point(52,48));
-	}
-	
+		
 	private void helper_setGet(opCode code, String key, Serializable data) throws BDDNotFoundException{
 		req.reqNumber = reqNum;
 		req.op_code = code;
