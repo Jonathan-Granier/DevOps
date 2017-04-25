@@ -6,6 +6,9 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import main.java.commande_structure.Answer;
+import main.java.commande_structure.Request;
+
 
 /**
  * 
@@ -43,6 +46,8 @@ public class Echange_Client {
      */
     public void start_Connexion()throws UnknownHostException, IOException{
     	socket = new Socket(IP,num_Socket);;
+    	in = socket.getInputStream();
+    	out = socket.getOutputStream();
     }
     
     /**
@@ -50,9 +55,11 @@ public class Echange_Client {
      * Faire la traduction avant
      * @throws IOException 
      */
-    public byte[] faire_un_echange(byte[] data_emmision, int data_size) throws IOException{
-    	out.write(data_emmision, 0, data_size);
-    	out.flush();
+    public Answer faire_un_echange(Request data_emmision) throws IOException{
+    	
+    	envoi_data(data_emmision);
+    	reception_data();
+    	//out.flush();
     	
     	return null;
     }
@@ -64,14 +71,14 @@ public class Echange_Client {
     /**
      * Envoi des données
      */
-    private void envoi_data(){
+    private void envoi_data(Request data_emmision){
     	
     }
     
     /**
      * Récupere des données
      */
-    private void reception_data(){
-    	
+    private Answer reception_data(){
+    	return null;
     }
 }
