@@ -1,10 +1,14 @@
 package client.java.fichiers_client;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Scanner;
 
+import client.java.echange_client.Echange_Client;
+import main.java.commande_structure.Answer;
 import main.java.commande_structure.Request;
 
 /**
@@ -21,39 +25,126 @@ public class Client {
 	private static int numReq = 0;
 	
 	public static void main(String[] args) {
-		//TODO - Appeler les fonctions de jon et faire des sexy moves
 		//Connection au serveur
-	
+		Echange_Client share = null;
+		String cmd;
+		Request req;
+		Answer ans;
+		Scanner input = new Scanner(System.in);
+		try {
+			share = new Echange_Client();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		System.out.println("PROJET DEVOPS - Client");
 		
-		//Entrée des requêtes sur la ligne de commande (boucle)
-		System.out.print(">");
+		while(true){
+			//Entrée des requêtes sur la ligne de commande (boucle)
+			
+			System.out.print(">");
+			
+			cmd = input.nextLine();
+			
+			if(cmd.equals("exit"))
+				System.exit(0);
+			
+			req = parse_cmd(cmd);
 		
-		
-			//Parser la commande
-			//Si "quit" tout quitter
+			try {
+				ans = share.faire_un_echange(req);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}	
+				
+			//TODO - traiter la réponse et afficher en fonction du résultat
 			
-			
-			//Envoyer la cmd_struct au serveur
-			
-			
-			//attendre/recevoir une réponse
-			//traiter la réponse et afficher en fonction du résultat
-			
+		}
 		
 	}
 
-	private Request parse_cmd(String cmd){
+	private static Request parse_cmd(String cmd){
 		Request req = new Request();
 		
 		String delimiters = "[]+";
 		String[] vals = cmd.split(delimiters);
-		
-		if(vals.length != 3){
+
+		if(vals.length<2)
 			return null;
+		
+		req.key = vals[1];
+		
+		switch (vals[0]){
+			case "setString" :
+				if(vals.length != 3){
+					return null;
+				}
+				req.op_code = Request.opCode.setString;
+				req.data = vals[2];
+				break;
+			
+			case "setInt" :
+				if(vals.length != 3){
+					return null;
+				}
+				req.op_code = Request.opCode.setInt;
+				req.data = Integer.parseInt(vals[2]);
+				break;
+			
+			case "setObject" :
+				if(vals.length != 3){
+					return null;
+				}
+				req.op_code = Request.opCode.setObject;
+				req.data = vals[2];
+				break;
+			
+			case "get" :
+				if(vals.length != 2){
+					return null;
+				}
+				req.op_code = Request.opCode.get;
+				req.data = null;
+				break;
+			
+			case "increment" :
+				if(vals.length != 2){
+					return null;
+				}
+				req.op_code = Request.opCode.increment;
+				req.data = null;
+				break;
+			
+			case "list_add" :
+				if(vals.length != 3){
+					return null;
+				}
+				req.op_code = Request.opCode.list_add;
+				req.data = vals[2];
+				break;
+			
+			case "list_remove" :
+				if(vals.length != 3){
+					return null;
+				}
+				req.op_code = Request.opCode.list_remove;
+				req.data = vals[2];
+				break;
+			
+			case "remove" :
+				if(vals.length != 3){
+					return null;
+				}
+				req.op_code = Request.opCode.remove;
+				req.data = vals[2];
+				break;
+			default :
+				//Unknown CMD exception
+				return null;
 		}
 		
+		req.reqNumber = numReq;
+		numReq++;
 		
 		return req;
 	}
