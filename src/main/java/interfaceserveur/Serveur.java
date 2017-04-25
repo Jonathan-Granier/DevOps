@@ -27,7 +27,7 @@ public class Serveur {
 	 * @throws IOException
 	 */
 	public void StartServeur() throws IOException{
-		ss = new ServerSocket(1337);
+		ss = new ServerSocket(numSocket);
 
         System.out.println("Le serveur est à l'écoute du port "+ss.getLocalPort());
         t = new Thread(new Accepter_connexion(ss,serverManager));

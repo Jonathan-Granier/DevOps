@@ -28,7 +28,7 @@ public class Echange_Client {
     private ObjectInputStream in;
     private ObjectOutputStream out;
     
-   
+    private Answer answer_rcv;
 	
     
     
@@ -40,6 +40,17 @@ public class Echange_Client {
     public Echange_Client() throws UnknownHostException, IOException {
         start_Connexion();    
     }
+    
+    /**
+     * Constructeur avec une socket déjà existante.
+     * @param socket
+     */
+    public Echange_Client( Socket socket){
+    	this.socket = socket;
+    }
+    
+    
+    
     
     /**
      * Commence la connexion avec l'adresse IP : 127.0.0.1 et le socket 1337
@@ -75,23 +86,40 @@ public class Echange_Client {
      * Envoi des données
      * @throws IOException 
      */
-    private void envoi_data(Request data_emmision) throws IOException{
+    public void envoi_data(Request data_emmision) throws IOException{
     	out.writeObject(data_emmision);
     	out.flush();
     }
     
     /**
+     * 
      * Récupere des données
      * @throws IOException 
      * @throws ClassNotFoundException 
      */
-    private Answer reception_data() throws ClassNotFoundException, IOException{
+    public Answer reception_data() throws ClassNotFoundException, IOException{
     	Object data_rcv = in.readObject();
-    	Answer answer_rcv = null;
+    	answer_rcv = null;
 		if(data_rcv instanceof Answer)
 		{
 			answer_rcv = (Answer) data_rcv;
 		}
 		return answer_rcv;
     }
+    
+    
+    public void stop_connexion() throws IOException{
+    	socket.close();
+    }
+
+
+    /**
+     * Recupere la dernière réponse recu par le serveur
+     * @return
+     */
+	public Answer getAnswer_rcv() {
+		return answer_rcv;
+	}
+    
+   
 }
