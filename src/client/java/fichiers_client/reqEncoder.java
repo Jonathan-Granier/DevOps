@@ -118,7 +118,7 @@ public abstract class reqEncoder {
 	 */
 	public static <T extends Serializable> byte[] set(String key, T object, int objectsize, int[] meta_data)
 	{
-		char opCode = operationCode.setObject;
+		//char opCode = operationCode.setObject;
 		int keyLen= key.length();
 		int dataLen = objectsize;
 		int reqNum = operationCode.reqNumber();
