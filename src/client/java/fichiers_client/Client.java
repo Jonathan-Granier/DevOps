@@ -22,7 +22,7 @@ public class Client {
 		Echange_Client share = null;
 		String cmd;
 		Request req = new Request();
-		Answer ans;
+		Answer ans = new Answer();
 		Scanner input = new Scanner(System.in);
 		try {
 			share = new Echange_Client();
@@ -54,12 +54,36 @@ public class Client {
 				e.printStackTrace();
 			}
 				
-			//TODO - traiter la réponse et afficher en fonction du résultat
-			
+			print_ans(ans);
 		}
 		
 	}
 
+	/**
+	 * Feedback de la requête (affiche des messages de validité ou d'erreur en fonction de l'état de la réponse)
+	 * @param ans la réponse à une requête
+	 */
+	private static void print_ans(Answer ans){
+		System.out.println("\treq "+ ans.reqNumber +" : ");
+		switch(ans.return_code){
+		case OK:
+			if(ans.data.equals(null))
+				System.out.println("OK");
+			else
+				System.out.println();
+			break;
+		case NonExistingKey :
+			System.out.println("Non existing key");
+			break;
+		case WrongDataType :
+			System.out.println("Wrong data type");
+			break;
+		default :
+			System.out.println("Nil");
+			break;
+		}
+	}
+	
 	/**
 	 * Parse l'entrée du client et rempli une structure request en fonction
 	 * @param cmd l'input du client

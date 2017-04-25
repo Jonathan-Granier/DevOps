@@ -14,7 +14,6 @@ import main.java.stockage_cle_valeur.StorageServer;
 
 import static org.junit.Assert.*;
 
-import java.awt.Point;
 import java.io.Serializable;
 
 /**
@@ -62,16 +61,6 @@ public class RequestHandlerTest{
 		assertEquals(reqNum,ans.reqNumber);
 	}
 		
-	private void helper_set_wrongType(opCode code, String key, Object data) throws BDDNotFoundException{
-		req.reqNumber = reqNum;
-		req.op_code = code;
-		req.key = key;
-		req.data = (Serializable) data;
-		Answer ans = rqHdl.handleRequest(req);
-		assertEquals(returnCode.WrongDataType,ans.return_code);
-		assertEquals(reqNum,ans.reqNumber);
-	}
-
 	@Test
 	public void test_setGetInt() throws BDDNotFoundException{
 		helper_setGet(opCode.set,"1",42);

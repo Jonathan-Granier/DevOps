@@ -2,8 +2,6 @@ package main.java.commande_structure;
 
 import java.io.Serializable;
 
-import main.java.interfaceserveur.operationCode;
-
 /**
  * Classe structure pour les requetes au RequestHandler
  * @author bouvigab
@@ -11,6 +9,8 @@ import main.java.interfaceserveur.operationCode;
  */
 public class Request implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	public enum opCode{	// Il y a donc deux sources de opcode (dans interface serveur) redondant probablement?
 		set,
 		get,

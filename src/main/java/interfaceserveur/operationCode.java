@@ -1,8 +1,5 @@
 package main.java.interfaceserveur;
 
-import main.java.commande_structure.Request.opCode;
-
-
 public abstract class operationCode {
 	public static int reqNumber =			0;
 	public final static char 	set=		1;
