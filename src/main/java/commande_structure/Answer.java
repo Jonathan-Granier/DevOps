@@ -1,11 +1,13 @@
 package main.java.commande_structure;
 
+import java.io.Serializable;
+
 /**
  * Classe structure pour les reponses du RequestHandler
  * @author bizarda
  *
  */
-public class Answer {
+public class Answer implements Serializable {
 
 	public enum returnCode{
 		OK,
@@ -14,6 +16,6 @@ public class Answer {
 	}
 	
 	public returnCode return_code;
-	public Object data;
+	public Serializable data; // Je pense que ce truc doit probablement implementer l'interface serializable aussi.
 	public int reqNumber;
 }

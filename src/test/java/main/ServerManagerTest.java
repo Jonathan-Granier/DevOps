@@ -10,6 +10,7 @@ import main.java.stockage_cle_valeur.StorageServer;
 
 import static org.junit.Assert.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -44,7 +45,7 @@ public class ServerManagerTest{
         assertEquals(0,((ArrayList<?>)svMgr.get(23)).size());
     }
 	
-	private void helper_AddGet(Object key, Object value) throws NonExistingKeyException, BDDNotFoundException{
+	private void helper_AddGet(Object key, Serializable value) throws NonExistingKeyException, BDDNotFoundException{
 		svMgr.add(key, value);
         assertEquals(value,svMgr.get(key));
 	}

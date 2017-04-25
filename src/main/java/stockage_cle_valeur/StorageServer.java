@@ -1,5 +1,6 @@
 package main.java.stockage_cle_valeur;
 
+import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Random;
@@ -19,7 +20,7 @@ public class StorageServer implements StorageServerInterface{
 	private static int nb_servers=0;
 	
 	private final int ID;
-	private Hashtable<Object,Object> H;
+	private Hashtable<Object,Serializable> H;
 	private LinkedList<Object> keys_usage_order;
 	private LinkedList<Object> values_usage_order;
 	private final int capacity;
@@ -30,7 +31,7 @@ public class StorageServer implements StorageServerInterface{
 	public StorageServer(){
 		ID = nb_servers;
 		nb_servers++;
-		H = new Hashtable<Object,Object>();
+		H = new Hashtable<Object,Serializable>();
 		keys_usage_order = new LinkedList<Object>();
 		values_usage_order = new LinkedList<Object>();
 		Random r = new Random();
@@ -70,7 +71,7 @@ public class StorageServer implements StorageServerInterface{
 		H.remove(keys_usage_order.pop());
 	}
 
-	public boolean contains(Object elem) {
+	public boolean contains(Serializable elem) {
 		if(H.contains(elem)){
 			int index_of_elem = values_usage_order.indexOf(elem);
 			refreshAtIndex(index_of_elem);
@@ -90,8 +91,8 @@ public class StorageServer implements StorageServerInterface{
 			return false;
 	}
 
-	public Object get(Object key) throws NonExistingKeyException{
-		Object res = H.get(key);
+	public Serializable get(Object key) throws NonExistingKeyException{
+		Serializable res = H.get(key);
 		if(res == null)
 			throw new NonExistingKeyException();
 		else{
@@ -101,7 +102,7 @@ public class StorageServer implements StorageServerInterface{
 		}
 	}
 
-	public void put(Object key, Object elem) {
+	public void put(Object key, Serializable elem) {
 		H.put(key, elem);
 		keys_usage_order.add(key);
 		values_usage_order.add(elem);

@@ -1,11 +1,13 @@
 package client.java.fichiers_client;
 
+import java.io.Serializable;
+
 import main.java.commande_structure.Request;
-import main.java.commande_structure.Request.opCode;
 import main.java.interfaceserveur.operationCode;
 
 public abstract class reqEncoder {
 	
+	//Redondant si Answer/request serializable?
 	/**
 	 * Return an array of bytes corresponding to the request
 	 * @param opCode
@@ -53,7 +55,7 @@ public abstract class reqEncoder {
 	 * return a SET request for a INT data
 	 * @param key
 	 * @param value
-	 * @param meta_data
+	 * @param meta_data [ reqNum | msgLen ]
 	 * @return
 	 */
 	public static byte[] set(String key, int value, int[] meta_data)
@@ -79,7 +81,7 @@ public abstract class reqEncoder {
 	 * return a SET request for a STRING data
 	 * @param key
 	 * @param value
-	 * @param meta_data
+	 * @param meta_data [ reqNum | msgLen ]
 	 * @return
 	 */
 	public static byte[] set(String key, String value, int[] meta_data)
@@ -107,10 +109,10 @@ public abstract class reqEncoder {
 	 * @param key
 	 * @param object
 	 * @param objectsize
-	 * @param meta_data
+	 * @param meta_data [ reqNum | msgLen ]
 	 * @return
 	 */
-	public static byte[] set(String key, byte[] object, int objectsize, int[] meta_data)
+	public static <T extends Serializable> byte[] set(String key, T object, int objectsize, int[] meta_data)
 	{
 		char opCode = operationCode.setObject;
 		int keyLen= key.length();
@@ -118,17 +120,19 @@ public abstract class reqEncoder {
 		int reqNum = operationCode.reqNumber();
 		meta_data[0] = reqNum;
 		
+		//TODO
 		//create the request
-		byte[] request = getRequest(opCode, reqNum, keyLen, dataLen, key, object);
-		meta_data[1] = request.length;
+		//byte[] request = getRequest(opCode, reqNum, keyLen, dataLen, key, object);
+		//meta_data[1] = request.length;
 		
-		return request;
+		//return request;
+		return null;
 	}
 	
 	/**
 	 * return a GET request
 	 * @param key
-	 * @param meta_data
+	 * @param meta_data [ reqNum | msgLen ]
 	 * @return
 	 */
 	public  static byte[] get(String key, int[] meta_data)
@@ -146,18 +150,25 @@ public abstract class reqEncoder {
 		return request;
 	}
 	
-	
-	public static byte[] getRequest(Request req, int[] metaData){
+	/**
+	 * 
+	 * @param req
+	 * @param metaData [ reqNum | msgLen ]
+	 * @return
+	 */
+	public static byte[] getRequest(Request req, int[] metaData){//TODO
 		char opCode = operationCode.opCode_to_char(req.op_code);
 		int keyLen = req.key.length();
-		int dataLen = req.data_as_byte.length;
-		byte[] request =  getRequest(opCode, req.reqNumber, keyLen, dataLen, req.key, req.data_as_byte);
+		//int dataLen = req.data_as_byte.length;
+		//byte[] request =  getRequest(opCode, req.reqNumber, keyLen, dataLen, req.key, req.data_as_byte);
 		
 		metaData[0]= req.reqNumber;
-		metaData[1] = request.length;
+		//metaData[1] = request.length;
 		
-		return request;
+		//return request;
+		return null;
 	}
+	
 	/**
 	 * Rempli un buffer déjà allouer avec un entier a partir de l'offset indiqué
 	 * @param input
@@ -172,6 +183,12 @@ public abstract class reqEncoder {
 		}
 	}
 	
+	/**
+	 * Rempli un buffer déjà allouer avec une chaine de char a partir de l'offset indiqué
+	 * @param input
+	 * @param buffer
+	 * @param offset
+	 */
 	private static void string_into_bytebuffer(String input, byte[] buffer, int offset){
 		for(byte b: input.getBytes())
 		{

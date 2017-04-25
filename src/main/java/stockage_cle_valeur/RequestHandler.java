@@ -1,5 +1,7 @@
 package main.java.stockage_cle_valeur;
 
+import java.io.Serializable;
+
 import main.java.commande_structure.Answer;
 import main.java.commande_structure.Answer.returnCode;
 import main.java.commande_structure.Request;
@@ -44,14 +46,14 @@ public class RequestHandler {
 	 * @return le resultat de cette requete
 	 */
 	public Answer handleRequest(Request req) throws BDDNotFoundException{
-		System.out.println("Traitment de la requete n°" + req.reqNumber);
+		System.out.println("Traitment de la requete nï¿½" + req.reqNumber);
 		Answer ans = new Answer();
 		ans.reqNumber = req.reqNumber;
 		ans.data = null;
 		switch(req.op_code){
 		case get:
 			try {
-				ans.data = server_manager.get(req.key);
+				ans.data = (Serializable) server_manager.get(req.key);
 			} catch (NonExistingKeyException e) {
 				ans.return_code = returnCode.NonExistingKey;
 				return ans;

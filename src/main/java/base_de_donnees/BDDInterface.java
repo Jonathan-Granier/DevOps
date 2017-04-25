@@ -1,5 +1,6 @@
 package main.java.base_de_donnees;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Map.Entry;
@@ -15,22 +16,22 @@ import java.util.Set;
  */
 public interface BDDInterface {
 
-	public void put(Object cle, Object valeur);
-	public Object get(Object cle) throws NonExistingKeyException;
+	public void put(Object cle, Serializable valeur);
+	public Serializable get(Object cle) throws NonExistingKeyException;
 	
-	public boolean contains(Object valeur);
+	public boolean contains(Serializable valeur);
 	public boolean containsKey(Object cle);
 
 	public boolean isEmpty();
 	public void clear();
 
 	public Enumeration<Object> keys();
-	public Enumeration<Object> elements();
+	public Enumeration<Serializable> elements();
 	
 	public Set<Object> keySet();
-	public Set<Entry<Object, Object>> entrySet();
+	public Set<Entry<Object, Serializable>> entrySet();
 	
-	public Collection<Object> values();
+	public Collection<Serializable> values();
 
 	public void remove(Object cle) throws NonExistingKeyException;
 }

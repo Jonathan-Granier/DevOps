@@ -1,5 +1,6 @@
 package main.java.stockage_cle_valeur;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import main.java.base_de_donnees.BDDInterface;
@@ -63,7 +64,7 @@ public class ServerManager {
 	 * @param cle une cle
 	 * @param valeur l'element a associer a la cle
 	 */
-	public void add(Object cle, Object valeur) throws BDDNotFoundException{
+	public void add(Object cle, Serializable valeur) throws BDDNotFoundException{
 		checkBDD();
 		if(!servers.isEmpty()){
 			if(servers.get(0).isFull())
@@ -79,9 +80,9 @@ public class ServerManager {
 	 * @param cle
 	 * @return l'element associe a cle
 	 */
-	public Object get(Object cle) throws NonExistingKeyException, BDDNotFoundException{
+	public Serializable get(Object cle) throws NonExistingKeyException, BDDNotFoundException{
 		checkBDD();
-		Object res = null;
+		Serializable res = null;
 		try {
 			res = servers.get(0).get(cle);
 			return res;
@@ -100,7 +101,7 @@ public class ServerManager {
 	 * @param valeur l'element a tester
 	 * @return vrai ssi valeur est dans la BDD
 	 */
-	public boolean contains(Object valeur) throws BDDNotFoundException{
+	public boolean contains(Serializable valeur) throws BDDNotFoundException{
 		checkBDD();
 		if(!servers.isEmpty() && servers.get(0).contains(valeur)){
 			return true;

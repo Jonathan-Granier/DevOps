@@ -55,4 +55,20 @@ public abstract class operationCode {
 			return opSpe;
 		}
 	}
+	
+	/**
+	 * Retourne un entier lue dans un buffer de bytes.
+	 * @param buffer
+	 * @param offset
+	 * @return
+	 */
+	public static int int_from_bytebuffer(byte[] buffer, int offset){
+		int retour=0;
+		int decalage = (int_length-1) *8;
+		for(int i= 0; i< int_length; i++){
+			retour += (buffer[offset+i] << decalage) ;
+			decalage -= 8;
+		}
+		return retour;
+	}
 }

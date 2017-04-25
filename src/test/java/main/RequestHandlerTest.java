@@ -14,6 +14,9 @@ import main.java.stockage_cle_valeur.StorageServer;
 
 import static org.junit.Assert.*;
 
+import java.awt.Point;
+import java.io.Serializable;
+
 /**
  * Test fonctionnel : verifie que les donnees sont coherentes pour le client
  */
@@ -51,14 +54,14 @@ public class RequestHandlerTest{
 	
 	@Test
 	public void test_setObject() throws BDDNotFoundException{
-		helper_set(opCode.setObject,"Un objet",this);
+		helper_set(opCode.setObject,"Un objet",true);
 	}
 	
 	private void helper_set(opCode code, String key, Object data) throws BDDNotFoundException{
 		req.reqNumber = reqNum;
 		req.op_code = code;
 		req.key = key;
-		req.data = data;
+		req.data = (Serializable) data;
 		Answer ans = rqHdl.handleRequest(req);
 		assertEquals(returnCode.OK,ans.return_code);
 		assertEquals(reqNum,ans.reqNumber);
@@ -83,7 +86,7 @@ public class RequestHandlerTest{
 		req.reqNumber = reqNum;
 		req.op_code = code;
 		req.key = key;
-		req.data = data;
+		req.data = (Serializable) data;
 		Answer ans = rqHdl.handleRequest(req);
 		assertEquals(returnCode.WrongDataType,ans.return_code);
 		assertEquals(reqNum,ans.reqNumber);
@@ -101,10 +104,10 @@ public class RequestHandlerTest{
 	
 	@Test
 	public void test_setGetObject() throws BDDNotFoundException{
-		helper_setGet(opCode.setObject,"3",this);
+		helper_setGet(opCode.setObject,"3",new Point(52,48));
 	}
 	
-	private void helper_setGet(opCode code, String key, Object data) throws BDDNotFoundException{
+	private void helper_setGet(opCode code, String key, Serializable data) throws BDDNotFoundException{
 		req.reqNumber = reqNum;
 		req.op_code = code;
 		req.key = key;

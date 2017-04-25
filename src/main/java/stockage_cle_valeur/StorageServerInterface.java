@@ -1,5 +1,7 @@
 package main.java.stockage_cle_valeur;
 
+import java.io.Serializable;
+
 import main.java.exception.NonExistingKeyException;
 
 /**
@@ -15,9 +17,9 @@ public interface StorageServerInterface {
 	public boolean isFull();
 	public void evinceLRU();
 	
-	public boolean contains(Object elem);
+	public boolean contains(Serializable elem);
 	public boolean containsKey(Object key);
-	public Object get(Object key) throws NonExistingKeyException;
-	public void put(Object key, Object elem);
+	public Serializable get(Object key) throws NonExistingKeyException;
+	public void put(Object key, Serializable elem);
 	public void remove(Object key) throws NonExistingKeyException;
 }
