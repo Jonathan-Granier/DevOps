@@ -3,10 +3,8 @@ package main.java.stockage_cle_valeur;
 import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.LinkedList;
-import java.util.Random;
 
 import main.java.exception.NonExistingKeyException;
-import main.java.exception.ServerFullException;
 
 /**
  * Serveur de stockage servant de cache au ServerManager
@@ -15,8 +13,7 @@ import main.java.exception.ServerFullException;
  */
 public class StorageServer implements StorageServerInterface{
 
-	private static final int AVG_CAPACITY = 30;
-	private static final int MARGE = 10;
+	private static final int CAPACITY = 30;
 	
 	private static int nb_servers=0;
 	
@@ -35,8 +32,7 @@ public class StorageServer implements StorageServerInterface{
 		H = new Hashtable<String,Serializable>();
 		keys_usage_order = new LinkedList<String>();
 		values_usage_order = new LinkedList<Serializable>();
-		Random r = new Random();
-		capacity = ((r.nextInt()%(2*MARGE))-MARGE) + AVG_CAPACITY;
+		capacity = CAPACITY;
 	}
 	
 	/**
@@ -71,6 +67,15 @@ public class StorageServer implements StorageServerInterface{
 		H.remove(keys_usage_order.pop(),values_usage_order.pop());
 	}
 
+	/**
+	 * Vide le serveur
+	 */
+	public void clear() {
+		H.clear();
+		keys_usage_order.clear();
+		values_usage_order.clear();
+	}
+
 	public boolean contains(Serializable elem) {
 		if(H.contains(elem)){
 			int index_of_elem = values_usage_order.indexOf(elem);
@@ -102,12 +107,18 @@ public class StorageServer implements StorageServerInterface{
 		}
 	}
 
-	public void put(String key, Serializable elem) throws ServerFullException{
-		if(this.isFull())
-			throw new ServerFullException();
-		H.put(key, elem);
-		keys_usage_order.add(key);
-		values_usage_order.add(elem);
+	/**
+	 * Renvoie vrai ssi tout s'est bien passé
+	 */
+	public boolean put(String key, Serializable elem){
+		if(!this.isFull()){
+			H.put(key, elem);
+			keys_usage_order.add(key);
+			values_usage_order.add(elem);
+			return true;
+		}
+		else
+			return false;
 	}
 
 	public void remove(String key) throws NonExistingKeyException{

@@ -49,7 +49,7 @@ public class RequestHandler {
 	 */
 	@SuppressWarnings("unchecked")
 	public Answer handleRequest(Request req) throws BDDNotFoundException, ServerMgrNotFoundException{
-		System.out.println("Traitment de la requete n" + req.reqNumber);
+		//System.out.println("Traitment de la requete n" + req.reqNumber);
 		if(server_manager == null)
 			throw new ServerMgrNotFoundException();
 		Answer ans = new Answer();
@@ -89,7 +89,13 @@ public class RequestHandler {
 					i = Integer.parseInt((String)req.data);
 				else
 					i = (Integer)req.data;
-				ans.data = ((ArrayList<Serializable>) theoretical_list).get(i);
+				try{
+					ans.data = ((ArrayList<Serializable>) theoretical_list).get(i);
+				}
+				catch(IndexOutOfBoundsException e){
+					ans.return_code = returnCode.IndexOutOfListBounds;
+					return ans;
+				}
 			}
 			else{
 				ans.return_code = returnCode.WrongDataType;
@@ -145,7 +151,13 @@ public class RequestHandler {
 					i = Integer.parseInt((String)req.data);
 				else
 					i = (Integer)req.data;
-				((ArrayList<Serializable>) theoretical_list).remove(i);
+				try{
+					((ArrayList<Serializable>) theoretical_list).remove(i);
+				}
+				catch(IndexOutOfBoundsException e){
+					ans.return_code = returnCode.IndexOutOfListBounds;
+					return ans;
+				}
 				server_manager.add(req.key, (Serializable) theoretical_list);
 			}
 			else{

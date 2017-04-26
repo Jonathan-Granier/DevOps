@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import main.java.base_de_donnees.BDDInterface;
 import main.java.exception.BDDNotFoundException;
 import main.java.exception.NonExistingKeyException;
-import main.java.exception.ServerFullException;
 
 /**
  * Classe centrale de gestion des serveurs de cache devant la BDD
@@ -61,6 +60,15 @@ public class ServerManager {
 	}
 	
 	/**
+	 * Vide tous les serveurs et les retire
+	 */
+	public void clearServers(){
+		for(StorageServerInterface server : servers)
+			server.clear();
+		servers.clear();
+	}
+	
+	/**
 	 * Ajouter un element dans la BDD
 	 * @param cle une cle
 	 * @param valeur l'element a associer a la cle
@@ -70,12 +78,7 @@ public class ServerManager {
 		if(!servers.isEmpty()){
 			if(servers.get(0).isFull())
 				servers.get(0).evinceLRU();
-			try {
-				servers.get(0).put(cle,valeur);
-			} catch (ServerFullException e) {
-				// Not supposed to happen
-				e.printStackTrace();
-			}
+			servers.get(0).put(cle,valeur);
 		}
 		BDD.put(cle,valeur);
 		BDD_write_access ++;
@@ -93,11 +96,10 @@ public class ServerManager {
 			res = servers.get(0).get(cle);
 			return res;
 		}
-		catch (Exception ignored) {		// Might be NonExistingKeyException or NullPointerException, in both cases search the BDD
+		catch (Exception ignored) {
+			// Might be NonExistingKeyException or NullPointerException, in both cases search the BDD
 			res = BDD.get(cle);
 			BDD_read_access ++;
-			if(res == null)
-				throw new NonExistingKeyException();
 			return res;
 		}
 	}
