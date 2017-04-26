@@ -14,8 +14,10 @@ Exécuter le projet :
 
 Lancer le serveur : aller dans le dossier Serveur et faire :  
 > $ mvn exec:java  
+
 Lancer le client  : aller dans le dossier Client et faire :  
 > $ mvn exec:java  
+
 Pour avoir la liste des commandes client, taper "man"
 
 
