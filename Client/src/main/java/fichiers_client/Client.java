@@ -49,6 +49,7 @@ public class Client {
 				
 				if(send){
 					try {
+						System.out.println();
 						req = parse_cmd(cmd);
 					} catch (UnknownCmdException e){
 						System.out.println("COMMANDE INCONNUE");
@@ -142,7 +143,7 @@ public class Client {
 		
 		String[] vals = cmd.split("[ ]+");
 
-		System.out.println();
+		//System.out.println();
 		if(vals.length<2){
 			send = false;
 			return null;
