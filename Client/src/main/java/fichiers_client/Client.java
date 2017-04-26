@@ -45,7 +45,7 @@ public class Client {
 				if(loop){
 					try {
 						req = parse_cmd(cmd);
-					} catch (UnknownCmdException | InvalidInstructionException e1) {
+					} catch (UnknownCmdException | InvalidInstructionException | InvalidNumArgumentException e1) {
 						e1.printStackTrace();
 					}
 				
@@ -110,8 +110,9 @@ public class Client {
 	 * @return la requete correspondante
 	 * @throws UnknownCmdException 
 	 * @throws InvalidInstructionException 
+	 * @throws InvalidNumArgumentException 
 	 */
-	public static Request parse_cmd(String cmd) throws UnknownCmdException, InvalidInstructionException{
+	public static Request parse_cmd(String cmd) throws UnknownCmdException, InvalidInstructionException, InvalidNumArgumentException{
 		Request req = new Request();
 		
 		String[] vals = cmd.split("[ ]+");
@@ -126,7 +127,7 @@ public class Client {
 			case "set" :
 			case "SET" :
 				if(vals.length != 3){
-					return null;
+					throw new InvalidNumArgumentException();
 				}
 				req.op_code = Request.opCode.set;
 				req.data = assign_data(vals[2],req.op_code);
@@ -135,7 +136,7 @@ public class Client {
 			case "get" :
 			case "GET" :
 				if(vals.length != 2){
-					return null;
+					throw new InvalidNumArgumentException();
 				}
 				req.op_code = Request.opCode.get;
 				req.data = null;
@@ -143,7 +144,7 @@ public class Client {
 
 			case "getAtIndex" :
 				if(vals.length != 3){
-					return null;
+					throw new InvalidNumArgumentException();
 				}
 				req.op_code = Request.opCode.get_elem_of_list_at_index;
 				req.data = assign_data(vals[2],req.op_code);
@@ -151,7 +152,7 @@ public class Client {
 				
 			case "increment" :
 				if(vals.length != 2){
-					return null;
+					throw new InvalidNumArgumentException();
 				}
 				req.op_code = Request.opCode.increment;
 				req.data = null;
@@ -159,7 +160,7 @@ public class Client {
 			
 			case "list_add" :
 				if(vals.length != 3){
-					return null;
+					throw new InvalidNumArgumentException();
 				}
 				req.op_code = Request.opCode.list_add;
 				req.data = assign_data(vals[2],req.op_code);
@@ -167,7 +168,7 @@ public class Client {
 			
 			case "list_remove" :
 				if(vals.length != 3){
-					return null;
+					throw new InvalidNumArgumentException();
 				}
 				req.op_code = Request.opCode.list_remove;
 				req.data = assign_data(vals[2],req.op_code);
@@ -175,7 +176,7 @@ public class Client {
 			
 			case "remove" :
 				if(vals.length != 2){
-					return null;
+					throw new InvalidNumArgumentException();
 				}
 				req.op_code = Request.opCode.remove;
 				req.data = null;
