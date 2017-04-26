@@ -1,6 +1,3 @@
-JONATHAN CALL ME (ASTOR)
-=============
-
 Projet DevOps
 =============
 
