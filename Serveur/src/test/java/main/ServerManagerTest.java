@@ -55,6 +55,12 @@ public class ServerManagerTest{
     	svMgr.add(42, 23);
     	svMgr.get(23);
     }
+    
+    @Test(expected = BDDNotFoundException.class)
+    public void test_NoBDD() throws NonExistingKeyException, BDDNotFoundException{
+    	svMgr.changeBDD(null);
+    	svMgr.add("oui", "non");
+    }
 }
 
 
