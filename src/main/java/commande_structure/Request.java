@@ -36,5 +36,16 @@ public class Request implements Serializable {
 		this.data = data;
 		this.reqNumber = reqNumber;
 	}
+	
+	public boolean equals(Object that){
+		if(!(that instanceof Request))
+			return false;
+		Request reqthat = (Request)that;
+		return this.op_code == reqthat.op_code 
+				&& this.key.equals(reqthat.key) 
+				&& this.reqNumber == reqthat.reqNumber 
+				&& this.data.equals(reqthat.data);
+		
+	}
 
 }

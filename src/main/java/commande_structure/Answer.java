@@ -19,4 +19,14 @@ public class Answer implements Serializable {
 	public returnCode return_code;
 	public Serializable data; // Je pense que ce truc doit probablement implementer l'interface serializable aussi.
 	public int reqNumber;
+	
+	public boolean equals(Object that){
+		if(!(that instanceof Answer))
+			return false;
+		Answer ansthat = (Answer)that;
+		return this.return_code == ansthat.return_code 
+				&& this.reqNumber == ansthat.reqNumber 
+				&& this.data.equals(ansthat.data);
+		
+	}
 }
