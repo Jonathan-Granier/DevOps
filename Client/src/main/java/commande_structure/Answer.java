@@ -13,7 +13,8 @@ public class Answer implements Serializable {
 	public enum returnCode{
 		OK,
 		NonExistingKey,
-		WrongDataType
+		WrongDataType,
+		IndexOutOfListBounds
 	}
 	
 	public returnCode return_code;
