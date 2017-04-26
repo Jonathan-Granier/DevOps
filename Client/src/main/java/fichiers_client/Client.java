@@ -62,17 +62,14 @@ public class Client {
 						print_ans = false;
 					}
 					
-					System.out.println("\nBBBBBBBBBBBBBBB!!!!");
-					
 					if(print_ans){
 						try {
 							ans = share.faire_un_echange(req);
-							System.out.println("\nDOONE!!!!");
 						} catch (ClassNotFoundException | IOException e) {
 							e.printStackTrace();
 						}
 						if(ans!=null)
-							print_ans(ans);
+							print_ans(req,ans);
 					}
 				}
 				send = true;
@@ -83,6 +80,7 @@ public class Client {
 		} catch (IOException e) {
 			System.out.println("Echec de connexion");
 		}
+		System.out.println();
 	}
 
 	/**
@@ -104,15 +102,16 @@ public class Client {
 	 * Feedback de la requête (affiche des messages de validité ou d'erreur en fonction de l'état de la réponse)
 	 * @param ans la réponse à une requête
 	 */
-	private static void print_ans(Answer ans){
-		System.out.print("\treq "+ ans.reqNumber +" : ");
+	private static void print_ans(Request req,Answer ans){
+		System.out.print("req "+ ans.reqNumber +" : ");
 		switch(ans.return_code){
 		case OK:
-			if(ans.data==null)
-				System.out.print("OK");
-			else{
-				//TODO
+			if(req.op_code.equals(Request.opCode.get) || req.op_code.equals(Request.opCode.get_elem_of_list_at_index) || req.op_code.equals(Request.opCode.increment)){
+				System.out.print(ans.data);
 			}
+			else
+				System.out.print("OK");
+					
 			System.out.println();
 			break;
 		case NonExistingKey :
@@ -120,6 +119,9 @@ public class Client {
 			break;
 		case WrongDataType :
 			System.out.println("Wrong data type");
+			break;
+		case IndexOutOfListBounds :
+			System.out.println("Index out of list's bounds");
 			break;
 		default :
 			System.out.println("Nil");
@@ -178,12 +180,15 @@ public class Client {
 				break;
 				
 			case "increment" :
-				if(vals.length != 2){
+				if(vals.length > 3){
 					send = false;
-					throw new InvalidNumArgumentException(2,vals.length);
+					throw new InvalidNumArgumentException(3,vals.length);
 				}
 				req.op_code = Request.opCode.increment;
-				req.data = null;
+				if(vals.length==2)
+					req.data = 1;
+				else
+					req.data = assign_data(vals[2],req.op_code);
 				break;
 			
 			case "list_add" :
@@ -230,6 +235,7 @@ public class Client {
 	 * @throws InvalidInstructionException 
 	 */
 	private static Serializable assign_data(String val, Request.opCode op) throws InvalidInstructionException{
+		Serializable val_alt = val;
 		if(val.startsWith("-")){
 			switch(val.substring(1)){
 			case "entier1" :
@@ -263,8 +269,22 @@ public class Client {
 				return val;
 			}
 		}
+		if(op.equals(Request.opCode.set) || op.equals(Request.opCode.list_add)){
+			try{
+				val_alt = Integer.parseInt(val);
+			} catch (NumberFormatException e){
+				val_alt = val;
+			}
+		}
+		else if(op.equals(Request.opCode.list_remove)){
+			try{
+				val_alt = Integer.parseInt(val);
+			} catch (NumberFormatException e){
+				throw new InvalidInstructionException();
+			}
+		}
 			
-		return val;
+		return val_alt;
 	}
 	
 	/////////////////////// OBJETS PRE-REMPLIS ///////////////////////
