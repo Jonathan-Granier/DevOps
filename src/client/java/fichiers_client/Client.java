@@ -8,7 +8,6 @@ import java.util.Scanner;
 import client.java.echange_client.Echange_Client;
 import main.java.commande_structure.Answer;
 import main.java.commande_structure.Request;
-import main.java.interfaceserveur.operationCode;
 
 /**
  * Classe interface du client : envoi des requêtes
