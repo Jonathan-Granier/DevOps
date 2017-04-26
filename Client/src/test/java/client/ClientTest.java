@@ -25,24 +25,9 @@ public class ClientTest {
  		assertEquals("x",req.key);
  	}
     
-    @Test
- 	public void test_parseGET() throws UnknownCmdException, InvalidInstructionException, InvalidNumArgumentException {
- 		Request req = Client.parse_cmd("GET x");
- 		assertEquals(opCode.get,req.op_code);
- 		assertEquals("x",req.key);
- 	}
-    
 	@Test
 	public void test_parseSet() throws UnknownCmdException, InvalidInstructionException, InvalidNumArgumentException {
 		Request req = Client.parse_cmd("set y 1");
-		assertEquals(opCode.set,req.op_code);
-		assertEquals("y",req.key);
-		assertEquals(1,req.data);
-	}
-    
-	@Test
-	public void test_parseSET() throws UnknownCmdException, InvalidInstructionException, InvalidNumArgumentException {
-		Request req = Client.parse_cmd("SET y 1");
 		assertEquals(opCode.set,req.op_code);
 		assertEquals("y",req.key);
 		assertEquals(1,req.data);
@@ -108,18 +93,8 @@ public class ClientTest {
 	}
 	
 	@Test(expected=InvalidNumArgumentException.class)
-	public void test_parseInvalidArgumentNbGET() throws UnknownCmdException, InvalidInstructionException, InvalidNumArgumentException {
-		Client.parse_cmd("GET x 23");
-	}
-	
-	@Test(expected=InvalidNumArgumentException.class)
 	public void test_parseInvalidArgumentNbSet() throws UnknownCmdException, InvalidInstructionException, InvalidNumArgumentException {
 		Client.parse_cmd("set x");
-	}
-	
-	@Test(expected=InvalidNumArgumentException.class)
-	public void test_parseInvalidArgumentNbSET() throws UnknownCmdException, InvalidInstructionException, InvalidNumArgumentException {
-		Client.parse_cmd("SET x");
 	}
 	
 	@Test(expected=InvalidNumArgumentException.class)
@@ -145,5 +120,39 @@ public class ClientTest {
 	@Test(expected=InvalidNumArgumentException.class)
 	public void test_parseInvalidArgumentNbRemove() throws UnknownCmdException, InvalidInstructionException, InvalidNumArgumentException {
 		Client.parse_cmd("remove x 1");
+	}
+	
+	
+	/////////////////
+	
+
+	@Test(expected=InvalidInstructionException.class)
+	public void test_parseInvalidInstructionStr1() throws UnknownCmdException, InvalidInstructionException, InvalidNumArgumentException {
+		Client.parse_cmd("increment x -chaine1");
+	}
+	
+	@Test(expected=InvalidInstructionException.class)
+	public void test_parseInvalidInstructionStr2() throws UnknownCmdException, InvalidInstructionException, InvalidNumArgumentException {
+		Client.parse_cmd("increment x -chaine2");
+	}
+	
+	@Test(expected=InvalidInstructionException.class)
+	public void test_parseInvalidInstructionListInt() throws UnknownCmdException, InvalidInstructionException, InvalidNumArgumentException {
+		Client.parse_cmd("increment x -listeEntier");
+	}
+	
+	@Test(expected=InvalidInstructionException.class)
+	public void test_parseInvalidInstructionListStr() throws UnknownCmdException, InvalidInstructionException, InvalidNumArgumentException {
+		Client.parse_cmd("increment x -listeString");
+	}
+	
+	@Test(expected=InvalidInstructionException.class)
+	public void test_parseInvalidInstructionListVide() throws UnknownCmdException, InvalidInstructionException, InvalidNumArgumentException {
+		Client.parse_cmd("increment x -listeVide");
+	}
+	
+	@Test(expected=InvalidInstructionException.class)
+	public void test_parseInvalidInstructionListRemoveSmth() throws UnknownCmdException, InvalidInstructionException, InvalidNumArgumentException {
+		Client.parse_cmd("list_remove list wololo");
 	}
 }
