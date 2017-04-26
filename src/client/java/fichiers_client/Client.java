@@ -163,7 +163,7 @@ public class Client {
 				throw new UnknownCmdException();
 		}
 		
-		req.reqNumber = operationCode.reqNumber();
+		req.reqNumber = Request.getReqNumber();
 		
 		return req;
 	}

@@ -11,6 +11,8 @@ public class Request implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
+	public static int reqNumberGen = 0;
+	
 	public enum opCode{	// Il y a donc deux sources de opcode (dans interface serveur) redondant probablement?
 		set,
 		get,
@@ -37,4 +39,8 @@ public class Request implements Serializable {
 		this.reqNumber = reqNumber;
 	}
 
+	public static synchronized int getReqNumber(){
+		return reqNumberGen++;
+	}
+	
 }
