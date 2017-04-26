@@ -8,7 +8,6 @@ import java.util.Scanner;
 import client.java.echange_client.Echange_Client;
 import main.java.commande_structure.Answer;
 import main.java.commande_structure.Request;
-import main.java.interfaceserveur.operationCode;
 
 /**
  * Classe interface du client : envoi des requêtes
@@ -39,7 +38,7 @@ public class Client {
 			
 			cmd = input.nextLine();
 			
-			if(cmd.equals("exit"))
+			if(cmd.equals("exit") || cmd.equals("quit"))
 				System.exit(0);
 			
 			try {
@@ -90,12 +89,12 @@ public class Client {
 	 * @return la requete correspondante
 	 * @throws UnknownCmdException 
 	 */
-	private static Request parse_cmd(String cmd) throws UnknownCmdException{
+	public static Request parse_cmd(String cmd) throws UnknownCmdException{
 		Request req = new Request();
 		
-		String delimiters = "[]+";
-		String[] vals = cmd.split(delimiters);
+		String[] vals = cmd.split("[ ]+");
 
+		System.out.println();
 		if(vals.length<2)
 			return null;
 		
@@ -163,7 +162,7 @@ public class Client {
 				throw new UnknownCmdException();
 		}
 		
-		req.reqNumber = operationCode.reqNumber();
+		req.reqNumber = Request.getReqNumber();
 		
 		return req;
 	}
