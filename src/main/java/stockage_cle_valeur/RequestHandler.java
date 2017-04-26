@@ -46,7 +46,7 @@ public class RequestHandler {
 	 * @return le resultat de cette requete
 	 */
 	public Answer handleRequest(Request req) throws BDDNotFoundException{
-		System.out.println("Traitment de la requete n�" + req.reqNumber);
+		System.out.println("Traitment de la requete n" + req.reqNumber);
 		Answer ans = new Answer();
 		ans.reqNumber = req.reqNumber;
 		ans.data = null;
@@ -68,10 +68,10 @@ public class RequestHandler {
 			}
 			break;
 		case set:
-			if(! (req.data instanceof Integer) || ! (req.data instanceof String)){
+			/*if(! (req.data instanceof Integer) && ! (req.data instanceof String)){
 				ans.return_code = returnCode.WrongDataType;
 				return ans;
-			}
+			}*///Ce test n'est pas necessaire, toute donnée serializable est passable
 			server_manager.add(req.key, req.data);
 			break;
 		case get_elem_of_list_at_index:
