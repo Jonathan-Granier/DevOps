@@ -3,7 +3,6 @@ package test.java.main;
 import static org.junit.Assert.*;
 
 import java.io.*;
-import java.nio.channels.Pipe;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -13,7 +12,6 @@ import main.java.commande_structure.Answer;
 import main.java.commande_structure.Answer.returnCode;
 import main.java.commande_structure.Request;
 import main.java.commande_structure.Request.opCode;
-import main.java.exception.BDDNotFoundException;
 
 public class Commande_structureSerializationTest {
 	
