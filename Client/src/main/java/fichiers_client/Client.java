@@ -1,4 +1,4 @@
-package main.java.fichiers_client;
+package client.java.fichiers_client;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -40,6 +40,8 @@ public class Client {
 			
 			if(cmd.equals("exit") || cmd.equals("quit"))
 				System.exit(0);
+			else if(cmd.equals("man") || cmd.equals("help"))
+				print_list_cmd();
 			
 			try {
 				req = parse_cmd(cmd);
@@ -58,6 +60,17 @@ public class Client {
 		
 	}
 
+	private static void print_list_cmd(){
+		System.out.println("Liste des commandes dispo :");
+		System.out.println("-set :");
+		System.out.println("-get :");
+		System.out.println("-increment");
+		System.out.println("-list_add");
+		System.out.println("-getAtIndex");
+		System.out.println("-list_remove");
+		System.out.println("-remove");
+	}
+	
 	/**
 	 * Feedback de la requête (affiche des messages de validité ou d'erreur en fonction de l'état de la réponse)
 	 * @param ans la réponse à une requête
@@ -211,3 +224,4 @@ public class Client {
 
 	static Serializable listeVide = new ArrayList<Object>();
 }
+
