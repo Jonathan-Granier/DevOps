@@ -25,9 +25,24 @@ public class ClientTest {
  		assertEquals("x",req.key);
  	}
     
+    @Test
+ 	public void test_parseGET() throws UnknownCmdException, InvalidInstructionException, InvalidNumArgumentException {
+ 		Request req = Client.parse_cmd("GET x");
+ 		assertEquals(opCode.get,req.op_code);
+ 		assertEquals("x",req.key);
+ 	}
+    
 	@Test
 	public void test_parseSet() throws UnknownCmdException, InvalidInstructionException, InvalidNumArgumentException {
 		Request req = Client.parse_cmd("set y 1");
+		assertEquals(opCode.set,req.op_code);
+		assertEquals("y",req.key);
+		assertEquals(1,req.data);
+	}
+    
+	@Test
+	public void test_parseSET() throws UnknownCmdException, InvalidInstructionException, InvalidNumArgumentException {
+		Request req = Client.parse_cmd("SET y 1");
 		assertEquals(opCode.set,req.op_code);
 		assertEquals("y",req.key);
 		assertEquals(1,req.data);
@@ -83,18 +98,28 @@ public class ClientTest {
 	
 	@Test
 	public void test_parseInvalidArgumentNb() throws UnknownCmdException, InvalidInstructionException, InvalidNumArgumentException {
-		Request req = Client.parse_cmd("get");
+		Request req = Client.parse_cmd("increment");
 		assertEquals(null,req);
 	}
-	
+
 	@Test(expected=InvalidNumArgumentException.class)
 	public void test_parseInvalidArgumentNbGet() throws UnknownCmdException, InvalidInstructionException, InvalidNumArgumentException {
 		Client.parse_cmd("get x 23");
 	}
 	
 	@Test(expected=InvalidNumArgumentException.class)
+	public void test_parseInvalidArgumentNbGET() throws UnknownCmdException, InvalidInstructionException, InvalidNumArgumentException {
+		Client.parse_cmd("GET x 23");
+	}
+	
+	@Test(expected=InvalidNumArgumentException.class)
 	public void test_parseInvalidArgumentNbSet() throws UnknownCmdException, InvalidInstructionException, InvalidNumArgumentException {
 		Client.parse_cmd("set x");
+	}
+	
+	@Test(expected=InvalidNumArgumentException.class)
+	public void test_parseInvalidArgumentNbSET() throws UnknownCmdException, InvalidInstructionException, InvalidNumArgumentException {
+		Client.parse_cmd("SET x");
 	}
 	
 	@Test(expected=InvalidNumArgumentException.class)
