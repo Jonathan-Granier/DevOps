@@ -8,6 +8,17 @@ BOUVIER-DENOIX Gabriel
 GRANIER Jonathan  
 LAWSON Thibault  
 
+
+
+ 
+HOW TO RUN
+---------------------------  
+
+Lancer le serveur : aller dans le dossier serveur faite : mvn exec:java
+Lancer le client  : aller dans le dossier client  faire : mvn exec:java 
+
+
+
 A DISCUTER :  
 Est-ce necessaire d'avoir le type du set dans Request ?  
 - oui ou non, ca dépend. Pour faire des opérations spécifiques c'est interessant, en soit ça ne l'est pas.

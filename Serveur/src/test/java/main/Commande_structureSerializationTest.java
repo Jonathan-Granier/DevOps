@@ -13,7 +13,6 @@ import main.java.commande_structure.Answer;
 import main.java.commande_structure.Answer.returnCode;
 import main.java.commande_structure.Request;
 import main.java.commande_structure.Request.opCode;
-import main.java.exception.BDDNotFoundException;
 
 public class Commande_structureSerializationTest {
 	

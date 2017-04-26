@@ -1,6 +1,7 @@
 package main.java.stockage_cle_valeur;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import main.java.commande_structure.Answer;
 import main.java.commande_structure.Answer.returnCode;
@@ -45,11 +46,13 @@ public class RequestHandler {
 	 * @param req la requete a traiter
 	 * @return le resultat de cette requete
 	 */
+	@SuppressWarnings("unchecked")
 	public Answer handleRequest(Request req) throws BDDNotFoundException{
 		System.out.println("Traitment de la requete n" + req.reqNumber);
 		Answer ans = new Answer();
 		ans.reqNumber = req.reqNumber;
 		ans.data = null;
+		Object theoretical_list;
 		switch(req.op_code){
 		case get:
 			try {
@@ -75,13 +78,82 @@ public class RequestHandler {
 			server_manager.add(req.key, req.data);
 			break;
 		case get_elem_of_list_at_index:
-			//TODO
+			try {
+				theoretical_list = server_manager.get(req.key);
+			} catch (NonExistingKeyException e) {
+				ans.return_code = returnCode.NonExistingKey;
+				return ans;
+			}
+			if(theoretical_list instanceof ArrayList){
+				int i;
+				if(req.data instanceof String)
+					i = Integer.parseInt((String)req.data);
+				else
+					i = (Integer)req.data;
+				ans.data = ((ArrayList<Serializable>) theoretical_list).get(i);
+			}
+			else{
+				ans.return_code = returnCode.WrongDataType;
+				return ans;
+			}
 			break;
 		case increment:
+			Object theoretical_int;
+			try {
+				theoretical_int = server_manager.get(req.key);
+			} catch (NonExistingKeyException e) {
+				ans.return_code = returnCode.NonExistingKey;
+				return ans;
+			}
+			if(theoretical_int instanceof Integer){
+				int i;
+				if(req.data instanceof String)
+					i = Integer.parseInt((String)req.data);
+				else
+					i = (Integer)req.data;
+				server_manager.add(req.key,(Integer)theoretical_int + i);
+			}
+			else{
+				ans.return_code = returnCode.WrongDataType;
+				return ans;
+			}
 			break;
 		case list_add:
+			try {
+				theoretical_list = server_manager.get(req.key);
+			} catch (NonExistingKeyException e) {
+				ans.return_code = returnCode.NonExistingKey;
+				return ans;
+			}
+			if(theoretical_list instanceof ArrayList){
+				((ArrayList<Serializable>) theoretical_list).add(req.data);
+				server_manager.add(req.key, (Serializable) theoretical_list);
+			}
+			else{
+				ans.return_code = returnCode.WrongDataType;
+				return ans;
+			}
 			break;
 		case list_remove:
+			try {
+				theoretical_list = server_manager.get(req.key);
+			} catch (NonExistingKeyException e) {
+				ans.return_code = returnCode.NonExistingKey;
+				return ans;
+			}
+			if(theoretical_list instanceof ArrayList){
+				int i;
+				if(req.data instanceof String)
+					i = Integer.parseInt((String)req.data);
+				else
+					i = (Integer)req.data;
+				((ArrayList<Serializable>) theoretical_list).remove(i);
+				server_manager.add(req.key, (Serializable) theoretical_list);
+			}
+			else{
+				ans.return_code = returnCode.WrongDataType;
+				return ans;
+			}
 			break;
 		default:
 			break;
