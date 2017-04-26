@@ -8,6 +8,7 @@ import main.java.commande_structure.Answer.returnCode;
 import main.java.commande_structure.Request;
 import main.java.exception.BDDNotFoundException;
 import main.java.exception.NonExistingKeyException;
+import main.java.exception.ServerMgrNotFoundException;
 
 /**
  * Classe d'interpretation des requetes
@@ -47,8 +48,10 @@ public class RequestHandler {
 	 * @return le resultat de cette requete
 	 */
 	@SuppressWarnings("unchecked")
-	public Answer handleRequest(Request req) throws BDDNotFoundException{
+	public Answer handleRequest(Request req) throws BDDNotFoundException, ServerMgrNotFoundException{
 		System.out.println("Traitment de la requete n" + req.reqNumber);
+		if(server_manager == null)
+			throw new ServerMgrNotFoundException();
 		Answer ans = new Answer();
 		ans.reqNumber = req.reqNumber;
 		ans.data = null;
@@ -71,10 +74,6 @@ public class RequestHandler {
 			}
 			break;
 		case set:
-			/*if(! (req.data instanceof Integer) && ! (req.data instanceof String)){
-				ans.return_code = returnCode.WrongDataType;
-				return ans;
-			}*///Ce test n'est pas necessaire, toute donnée serializable est passable
 			server_manager.add(req.key, req.data);
 			break;
 		case get_elem_of_list_at_index:
@@ -122,8 +121,7 @@ public class RequestHandler {
 			try {
 				theoretical_list = server_manager.get(req.key);
 			} catch (NonExistingKeyException e) {
-				ans.return_code = returnCode.NonExistingKey;
-				return ans;
+				theoretical_list = new ArrayList<Serializable>();
 			}
 			if(theoretical_list instanceof ArrayList){
 				((ArrayList<Serializable>) theoretical_list).add(req.data);

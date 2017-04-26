@@ -13,6 +13,7 @@ import java.net.Socket;
 import main.java.commande_structure.Answer;
 import main.java.commande_structure.Request;
 import main.java.exception.BDDNotFoundException;
+import main.java.exception.ServerMgrNotFoundException;
 import main.java.stockage_cle_valeur.RequestHandler;
 import main.java.stockage_cle_valeur.ServerManager;
 
@@ -83,6 +84,10 @@ public class Echange_Serveur implements Runnable {
 				//e.printStackTrace();
 				// C'est NORMAL , TOUT VA BIEN !
 			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				Maintient_connexion = false;
+				e.printStackTrace();
+			} catch (ServerMgrNotFoundException e) {
 				// TODO Auto-generated catch block
 				Maintient_connexion = false;
 				e.printStackTrace();
