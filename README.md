@@ -28,6 +28,14 @@ A la racine :
 > $ mvn test  
 
 
+
+---------------------------  
+### Pour regénérer la couverture de code :
+
+A la racine :
+> $ mvn prepare-package  
+
+
 ---------------------------  
 ### Travail effectué :
 
