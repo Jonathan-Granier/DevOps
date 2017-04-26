@@ -1,2 +1,3 @@
 test/java/main/ServerManagerTest.class
 test/java/main/RequestHandlerTest.class
+test/java/main/Commande_structureSerializationTest.class
