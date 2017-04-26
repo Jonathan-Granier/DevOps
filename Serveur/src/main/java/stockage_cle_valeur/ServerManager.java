@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import main.java.base_de_donnees.BDDInterface;
 import main.java.exception.BDDNotFoundException;
 import main.java.exception.NonExistingKeyException;
+import main.java.exception.ServerFullException;
 
 /**
  * Classe centrale de gestion des serveurs de cache devant la BDD
@@ -64,12 +65,17 @@ public class ServerManager {
 	 * @param cle une cle
 	 * @param valeur l'element a associer a la cle
 	 */
-	public void add(Object cle, Serializable valeur) throws BDDNotFoundException{
+	public void add(String cle, Serializable valeur) throws BDDNotFoundException{
 		checkBDD();
 		if(!servers.isEmpty()){
 			if(servers.get(0).isFull())
 				servers.get(0).evinceLRU();
-			servers.get(0).put(cle,valeur);
+			try {
+				servers.get(0).put(cle,valeur);
+			} catch (ServerFullException e) {
+				// Not supposed to happen
+				e.printStackTrace();
+			}
 		}
 		BDD.put(cle,valeur);
 		BDD_write_access ++;
@@ -80,7 +86,7 @@ public class ServerManager {
 	 * @param cle
 	 * @return l'element associe a cle
 	 */
-	public Serializable get(Object cle) throws NonExistingKeyException, BDDNotFoundException{
+	public Serializable get(String cle) throws NonExistingKeyException, BDDNotFoundException{
 		checkBDD();
 		Serializable res = null;
 		try {
@@ -117,7 +123,7 @@ public class ServerManager {
 	 * @param cle la cle a tester
 	 * @return vrai ssi cle est dans la BDD
 	 */
-	public boolean containsKey(Object cle) throws BDDNotFoundException{
+	public boolean containsKey(String cle) throws BDDNotFoundException{
 		checkBDD();
 		if(!servers.isEmpty() && servers.get(0).containsKey(cle)){
 			return true;
@@ -128,7 +134,7 @@ public class ServerManager {
 		}
 	}
 	
-	public void remove(Object key) throws NonExistingKeyException, BDDNotFoundException {
+	public void remove(String key) throws NonExistingKeyException, BDDNotFoundException {
 		checkBDD();
 		if(!BDD.containsKey(key))
 			throw new NonExistingKeyException();

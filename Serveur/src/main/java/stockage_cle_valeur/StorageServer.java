@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.Random;
 
 import main.java.exception.NonExistingKeyException;
+import main.java.exception.ServerFullException;
 
 /**
  * Serveur de stockage servant de cache au ServerManager
@@ -20,9 +21,9 @@ public class StorageServer implements StorageServerInterface{
 	private static int nb_servers=0;
 	
 	private final int ID;
-	private Hashtable<Object,Serializable> H;
-	private LinkedList<Object> keys_usage_order;
-	private LinkedList<Object> values_usage_order;
+	private Hashtable<String,Serializable> H;
+	private LinkedList<String> keys_usage_order;
+	private LinkedList<Serializable> values_usage_order;
 	private final int capacity;
 	
 	/**
@@ -31,9 +32,9 @@ public class StorageServer implements StorageServerInterface{
 	public StorageServer(){
 		ID = nb_servers;
 		nb_servers++;
-		H = new Hashtable<Object,Serializable>();
-		keys_usage_order = new LinkedList<Object>();
-		values_usage_order = new LinkedList<Object>();
+		H = new Hashtable<String,Serializable>();
+		keys_usage_order = new LinkedList<String>();
+		values_usage_order = new LinkedList<Serializable>();
 		Random r = new Random();
 		capacity = ((r.nextInt()%(2*MARGE))-MARGE) + AVG_CAPACITY;
 	}
@@ -67,8 +68,7 @@ public class StorageServer implements StorageServerInterface{
 	 * @return false ssi le serveur etait vide
 	 */
 	public void evinceLRU() {
-		values_usage_order.pop();
-		H.remove(keys_usage_order.pop());
+		H.remove(keys_usage_order.pop(),values_usage_order.pop());
 	}
 
 	public boolean contains(Serializable elem) {
@@ -81,7 +81,7 @@ public class StorageServer implements StorageServerInterface{
 			return false;
 	}
 
-	public boolean containsKey(Object key) {
+	public boolean containsKey(String key) {
 		if(H.containsKey(key)){
 			int index_of_key = keys_usage_order.indexOf(key);
 			refreshAtIndex(index_of_key);
@@ -91,7 +91,7 @@ public class StorageServer implements StorageServerInterface{
 			return false;
 	}
 
-	public Serializable get(Object key) throws NonExistingKeyException{
+	public Serializable get(String key) throws NonExistingKeyException{
 		Serializable res = H.get(key);
 		if(res == null)
 			throw new NonExistingKeyException();
@@ -102,13 +102,15 @@ public class StorageServer implements StorageServerInterface{
 		}
 	}
 
-	public void put(Object key, Serializable elem) {
+	public void put(String key, Serializable elem) throws ServerFullException{
+		if(this.isFull())
+			throw new ServerFullException();
 		H.put(key, elem);
 		keys_usage_order.add(key);
 		values_usage_order.add(elem);
 	}
 
-	public void remove(Object key) throws NonExistingKeyException{
+	public void remove(String key) throws NonExistingKeyException{
 		H.remove(key);
 		int index_of_key = keys_usage_order.indexOf(key);
 		if(index_of_key == -1)

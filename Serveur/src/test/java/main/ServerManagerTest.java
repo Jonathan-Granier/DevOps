@@ -31,29 +31,29 @@ public class ServerManagerTest{
 
 	@Test
 	public void test_AddGet1() throws NonExistingKeyException, BDDNotFoundException{
-		helper_AddGet(42,23);
+		helper_AddGet("42",23);
 	}
 	
 	@Test
 	public void test_AddGet2() throws NonExistingKeyException, BDDNotFoundException{
-		helper_AddGet(66,"Hello world !");
+		helper_AddGet("66","Hello world !");
 	}
 
 	@Test
     public void test_AddGet3() throws NonExistingKeyException, BDDNotFoundException{
-		svMgr.add(23, new ArrayList<String>());
-        assertEquals(0,((ArrayList<?>)svMgr.get(23)).size());
+		svMgr.add("23", new ArrayList<String>());
+        assertEquals(0,((ArrayList<?>)svMgr.get("23")).size());
     }
 	
-	private void helper_AddGet(Object key, Serializable value) throws NonExistingKeyException, BDDNotFoundException{
+	private void helper_AddGet(String key, Serializable value) throws NonExistingKeyException, BDDNotFoundException{
 		svMgr.add(key, value);
         assertEquals(value,svMgr.get(key));
 	}
 
     @Test(expected = NonExistingKeyException.class)
     public void test_WrongKey() throws NonExistingKeyException, BDDNotFoundException{
-    	svMgr.add(42, 23);
-    	svMgr.get(23);
+    	svMgr.add("42", 23);
+    	svMgr.get("23");
     }
     
     @Test(expected = BDDNotFoundException.class)
