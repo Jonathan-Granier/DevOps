@@ -38,7 +38,7 @@ public class Client {
 			
 			cmd = input.nextLine();
 			
-			if(cmd.equals("exit"))
+			if(cmd.equals("exit") || cmd.equals("quit"))
 				System.exit(0);
 			
 			try {
@@ -89,12 +89,12 @@ public class Client {
 	 * @return la requete correspondante
 	 * @throws UnknownCmdException 
 	 */
-	private static Request parse_cmd(String cmd) throws UnknownCmdException{
+	public static Request parse_cmd(String cmd) throws UnknownCmdException{
 		Request req = new Request();
 		
-		String delimiters = "[]+";
-		String[] vals = cmd.split(delimiters);
+		String[] vals = cmd.split("[ ]+");
 
+		System.out.println();
 		if(vals.length<2)
 			return null;
 		
