@@ -31,7 +31,6 @@ public class Echange_Serveur implements Runnable {
     
     
 	private boolean Maintient_connexion;
-	private Request request_rcv;
 	
 	
 	
@@ -90,9 +89,9 @@ public class Echange_Serveur implements Runnable {
 	 * @throws IOException 
 	 * @throws ClassNotFoundException 
 	 */
-	public Request reception() throws ClassNotFoundException, IOException{
+	private Request reception() throws ClassNotFoundException, IOException{
 		Object data_rcv = in.readObject();
-		request_rcv = null;
+		Request request_rcv = null;
 		if(data_rcv instanceof Request)
 		{
 			request_rcv = (Request) data_rcv;
@@ -104,8 +103,7 @@ public class Echange_Serveur implements Runnable {
 	 * Envoie au client le retour de ça requete sous la forme d'un tableau de bytes
 	 * @throws IOException
 	 */
-	public void emmision(Answer data_emmision) throws IOException{
-        //TODO envoie, gaby
+	private void emmision(Answer data_emmision) throws IOException{
 		out.writeObject(data_emmision);
 		out.flush();
         
@@ -115,18 +113,11 @@ public class Echange_Serveur implements Runnable {
 	 * Stop la connexion
 	 * @throws IOException
 	 */
-	private void stopconnexion() throws IOException{
+	public void stopconnexion() throws IOException{
 		Maintient_connexion = false;
 		socket.close();
 		
 	}
 
-	/**
-	 * Recupere la dernière request recu par le client
-	 * @return
-	 */
-	public Request getRequest_rcv() {
-		return request_rcv;
-	}
-
+	
 }

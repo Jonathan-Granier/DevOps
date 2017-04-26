@@ -28,7 +28,7 @@ public class Echange_Client {
     private ObjectInputStream in;
     private ObjectOutputStream out;
     
-    private Answer answer_rcv;
+   
 	
     
     
@@ -48,7 +48,6 @@ public class Echange_Client {
     public Echange_Client( Socket socket){
     	this.socket = socket;
     }
-    
     
     
     
@@ -72,10 +71,10 @@ public class Echange_Client {
     public Answer faire_un_echange(Request data_emmision) throws IOException, ClassNotFoundException{
     	
     	envoi_data(data_emmision);
-    	reception_data();
     	
     	
-    	return null;
+    	
+    	return reception_data();
     }
     
 
@@ -86,7 +85,7 @@ public class Echange_Client {
      * Envoi des données
      * @throws IOException 
      */
-    public void envoi_data(Request data_emmision) throws IOException{
+    private void envoi_data(Request data_emmision) throws IOException{
     	out.writeObject(data_emmision);
     	out.flush();
     }
@@ -97,9 +96,9 @@ public class Echange_Client {
      * @throws IOException 
      * @throws ClassNotFoundException 
      */
-    public Answer reception_data() throws ClassNotFoundException, IOException{
+    private Answer reception_data() throws ClassNotFoundException, IOException{
     	Object data_rcv = in.readObject();
-    	answer_rcv = null;
+    	Answer answer_rcv = null;
 		if(data_rcv instanceof Answer)
 		{
 			answer_rcv = (Answer) data_rcv;
@@ -113,13 +112,7 @@ public class Echange_Client {
     }
 
 
-    /**
-     * Recupere la dernière réponse recu par le serveur
-     * @return
-     */
-	public Answer getAnswer_rcv() {
-		return answer_rcv;
-	}
+    
     
    
 }
