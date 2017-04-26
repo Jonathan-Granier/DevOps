@@ -94,8 +94,22 @@ public class Commande_structureSerializationTest {
 	}
     
     @Test
-	public void test_serializeAnswer() throws IOException, ClassNotFoundException{
+	public void test_StructureRequest_EqualsFalse() throws IOException, ClassNotFoundException{
     	int number_of_iter = rand.nextInt(258);
+    	
+    	for(int i =0; i < number_of_iter; i++){
+			Request sent = generateRandomRequest();
+			Request rcv;
+			out.writeObject(sent);
+			out.flush();
+			rcv = (Request) in.readObject();
+			assertFalse(sent.equals("12"));
+    	}
+	}
+    
+    @Test
+	public void test_serializeAnswer() throws IOException, ClassNotFoundException{
+    	int number_of_iter = rand.nextInt(256);
     	
     	for(int i =0; i < number_of_iter; i++){
 			Answer sent = generateRandomAnswer();
@@ -106,6 +120,20 @@ public class Commande_structureSerializationTest {
 			assertEquals(sent,rcv);
     	}
 	}
+    
+    @Test
+   	public void test_StructureAnswer_EqualsFalse() throws IOException, ClassNotFoundException{
+       	int number_of_iter = rand.nextInt(256);
+       	
+       	for(int i =0; i < number_of_iter; i++){
+   			Answer sent = generateRandomAnswer();
+   			Answer rcv;
+   			out.writeObject(sent);
+   			out.flush();
+   			rcv = (Answer) in.readObject();
+   			assertFalse(sent.equals("12"));
+       	}
+   	}
     
     private Request generateRandomRequest(){
     	opCode opC = list_opCode.get(rand.nextInt(list_opCode.size()));
