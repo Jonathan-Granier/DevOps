@@ -15,9 +15,11 @@ import main.java.commande_structure.Request;
  * 
  */
 public class Client {
+	private static boolean send = true;
 	
 	public static void main(String[] args) {
-		boolean loop = false;
+		boolean loop = true;
+		boolean print_ans = true;
 		//Connection au serveur
 		Echange_Client share = null;
 		String cmd;
@@ -27,36 +29,54 @@ public class Client {
 		
 		try {
 			share = new Echange_Client();
-			System.out.println("PROJET DEVOPS - Client");
+			System.out.println("\nPROJET DEVOPS - Client");
 			
 			do {
 			 //Entrée des requêtes sur la ligne de commande (boucle)
 				
-				System.out.print(">");
+				System.out.print("> ");
 				
 				cmd = input.nextLine();
 				
-				if(cmd.equals("exit") || cmd.equals("quit"))
+				if(cmd.equals("exit") || cmd.equals("quit")){
 					loop = false;
-					
-				else if(cmd.equals("man") || cmd.equals("help"))
+					send = false;
+				}
+				else if(cmd.equals("man") || cmd.equals("help")){
 					print_list_cmd();
+					send = false;
+				}
 				
-				if(loop){
+				if(send){
 					try {
 						req = parse_cmd(cmd);
-					} catch (UnknownCmdException | InvalidInstructionException | InvalidNumArgumentException e1) {
-						e1.printStackTrace();
+					} catch (UnknownCmdException e){
+						System.out.println("COMMANDE INCONNUE");
+						print_list_cmd();
+						print_ans = false;
+					} catch( InvalidInstructionException e){
+						System.out.println("Invalide instruction : incompatible data type !");
+						print_ans = false;
+					} catch(InvalidNumArgumentException e) {
+						System.out.println("Nombre d'arguments invalide! expected number :"+e.expected+" instead of "+e.input);
+						print_ans = false;
 					}
-				
-					try {
-						ans = share.faire_un_echange(req);
-					} catch (ClassNotFoundException | IOException e) {
-						e.printStackTrace();
+					
+					System.out.println("\nBBBBBBBBBBBBBBB!!!!");
+					
+					if(print_ans){
+						try {
+							ans = share.faire_un_echange(req);
+							System.out.println("\nDOONE!!!!");
+						} catch (ClassNotFoundException | IOException e) {
+							e.printStackTrace();
+						}
+						if(ans!=null)
+							print_ans(ans);
 					}
-						
-					print_ans(ans);
 				}
+				send = true;
+				print_ans = true;
 			}
 			while(loop);
 			share.stop_connexion();
@@ -65,8 +85,11 @@ public class Client {
 		}
 	}
 
+	/**
+	 * Affiche la liste des commandes que le client peut utiliser
+	 */
 	private static void print_list_cmd(){
-		System.out.println("Liste des commandes dispo :");
+		System.out.println("Liste des commandes disponibles :");
 		System.out.println("*set <cle> <valeur> -- sauvegarde la valeur <valeur> avec la cle <cle> ");
 		System.out.println("*get <cle> -- récupère la valeur sauvegardee avec la cle <cle>");
 		System.out.println("*increment <cle> <valeur> -- incremente de <valeur> la valeur sauvegardee avec la cle <cle> ");
@@ -82,10 +105,10 @@ public class Client {
 	 * @param ans la réponse à une requête
 	 */
 	private static void print_ans(Answer ans){
-		System.out.println("\treq "+ ans.reqNumber +" : ");
+		System.out.print("\treq "+ ans.reqNumber +" : ");
 		switch(ans.return_code){
 		case OK:
-			if(ans.data.equals(null))
+			if(ans.data==null)
 				System.out.print("OK");
 			else{
 				//TODO
@@ -118,16 +141,18 @@ public class Client {
 		String[] vals = cmd.split("[ ]+");
 
 		System.out.println();
-		if(vals.length<2)
+		if(vals.length<2){
+			send = false;
 			return null;
-		
+		}
 		req.key = vals[1];
 		
 		switch (vals[0]){
 			case "set" :
 			case "SET" :
 				if(vals.length != 3){
-					throw new InvalidNumArgumentException();
+					send = false;
+					throw new InvalidNumArgumentException(3,vals.length);
 				}
 				req.op_code = Request.opCode.set;
 				req.data = assign_data(vals[2],req.op_code);
@@ -136,7 +161,8 @@ public class Client {
 			case "get" :
 			case "GET" :
 				if(vals.length != 2){
-					throw new InvalidNumArgumentException();
+					send = false;
+					throw new InvalidNumArgumentException(2,vals.length);
 				}
 				req.op_code = Request.opCode.get;
 				req.data = null;
@@ -144,7 +170,8 @@ public class Client {
 
 			case "getAtIndex" :
 				if(vals.length != 3){
-					throw new InvalidNumArgumentException();
+					send = false;
+					throw new InvalidNumArgumentException(3,vals.length);
 				}
 				req.op_code = Request.opCode.get_elem_of_list_at_index;
 				req.data = assign_data(vals[2],req.op_code);
@@ -152,7 +179,8 @@ public class Client {
 				
 			case "increment" :
 				if(vals.length != 2){
-					throw new InvalidNumArgumentException();
+					send = false;
+					throw new InvalidNumArgumentException(2,vals.length);
 				}
 				req.op_code = Request.opCode.increment;
 				req.data = null;
@@ -160,7 +188,8 @@ public class Client {
 			
 			case "list_add" :
 				if(vals.length != 3){
-					throw new InvalidNumArgumentException();
+					send = false;
+					throw new InvalidNumArgumentException(3,vals.length);
 				}
 				req.op_code = Request.opCode.list_add;
 				req.data = assign_data(vals[2],req.op_code);
@@ -168,7 +197,8 @@ public class Client {
 			
 			case "list_remove" :
 				if(vals.length != 3){
-					throw new InvalidNumArgumentException();
+					send = false;
+					throw new InvalidNumArgumentException(3,vals.length);
 				}
 				req.op_code = Request.opCode.list_remove;
 				req.data = assign_data(vals[2],req.op_code);
@@ -176,17 +206,19 @@ public class Client {
 			
 			case "remove" :
 				if(vals.length != 2){
-					throw new InvalidNumArgumentException();
+					send = false;
+					throw new InvalidNumArgumentException(2,vals.length);
 				}
 				req.op_code = Request.opCode.remove;
 				req.data = null;
 				break;
 			default :
+				send = false;
 				throw new UnknownCmdException();
 		}
 		
 		req.reqNumber = Request.getReqNumber();
-		
+		send = false;
 		return req;
 	}
 	

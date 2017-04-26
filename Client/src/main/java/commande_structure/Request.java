@@ -55,6 +55,6 @@ public class Request implements Serializable {
 	}
 	
 	public String toString(){
-		return "reqNumber : "+ reqNumber +" | Op Code : "+ op_code.toString()+ " | key : "+ key + " | data :" + data.toString();
+		return "reqNumber : "+ reqNumber +" | Op Code : "+ op_code.toString()+ " | key : "+ key + " | data :" + ((data==null)?"none":data.toString());
 	}
 }
