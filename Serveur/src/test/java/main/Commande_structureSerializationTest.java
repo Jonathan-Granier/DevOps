@@ -14,6 +14,11 @@ import main.java.commande_structure.Answer.returnCode;
 import main.java.commande_structure.Request;
 import main.java.commande_structure.Request.opCode;
 
+/**
+ * Test sur les structures de données & leurs serialisation.
+ * @author bouvigab
+ *
+ */
 public class Commande_structureSerializationTest {
 	
 	private ObjectInputStream in;
@@ -95,16 +100,44 @@ public class Commande_structureSerializationTest {
     
     @Test
 	public void test_StructureRequest_EqualsFalse() throws IOException, ClassNotFoundException{
-    	int number_of_iter = rand.nextInt(258);
-    	
-    	for(int i =0; i < number_of_iter; i++){
-			Request sent = generateRandomRequest();
-			Request rcv;
-			out.writeObject(sent);
-			out.flush();
-			rcv = (Request) in.readObject();
-			assertFalse(sent.equals("12"));
-    	}
+		Request sent = generateRandomRequest();
+		Request rcv;
+		out.writeObject(sent);
+		out.flush();
+		rcv = (Request) in.readObject();
+		assertFalse(sent.equals("12"));
+		
+		sent = generateRandomRequest(); // BAD reqNumber
+		out.writeObject(sent);
+		out.flush();
+		rcv = (Request) in.readObject();
+		sent.reqNumber++;
+		assertFalse(sent.equals(rcv));
+		
+		sent = generateRandomRequest(); // Bad key
+		out.writeObject(sent);
+		out.flush();
+		rcv = (Request) in.readObject();
+		sent.key = sent.key + "b";
+		assertFalse(sent.equals(rcv));
+		
+		sent = generateRandomRequest(); // Bad data
+		out.writeObject(sent);
+		out.flush();
+		rcv = (Request) in.readObject();
+		sent.data = "Impossibru string";
+		assertFalse(sent.equals(rcv));
+		
+		sent = generateRandomRequest(); // Bad opCode
+		out.writeObject(sent);
+		out.flush();
+		rcv = (Request) in.readObject();
+		sent.op_code = nextOpCode(sent.op_code);
+		assertFalse(sent.equals(rcv));
+		
+		sent.toString();
+   		sent.data = null;	// GIVE ME 100% PLZ!
+		
 	}
     
     @Test
@@ -123,17 +156,58 @@ public class Commande_structureSerializationTest {
     
     @Test
    	public void test_StructureAnswer_EqualsFalse() throws IOException, ClassNotFoundException{
-       	int number_of_iter = rand.nextInt(256);
-       	
-       	for(int i =0; i < number_of_iter; i++){
-   			Answer sent = generateRandomAnswer();
-   			Answer rcv;
-   			out.writeObject(sent);
-   			out.flush();
-   			rcv = (Answer) in.readObject();
-   			assertFalse(sent.equals("12"));
-       	}
+   		Answer sent = generateRandomAnswer();
+   		Answer unexpected_answer;
+   		out.writeObject(sent);
+   		out.flush();
+   		Object rcv = in.readObject();
+   		assertFalse(sent.equals("12"));
+   		assertTrue(sent.equals(rcv));
+   		
+   		
+   		unexpected_answer = (Answer) rcv; //BAD answer number
+   		unexpected_answer.reqNumber ++;
+   		assertFalse(sent.equals(unexpected_answer));
+   		
+   		sent = generateRandomAnswer(); //BAD returnCode
+   		out.writeObject(sent);
+   		out.flush();
+   		rcv = in.readObject();
+   		sent.return_code = nextRetCode(sent.return_code);
+   		assertFalse(sent.equals(rcv));
+   		
+   		sent = generateRandomAnswer(); //BAD data
+   		out.writeObject(sent);
+   		out.flush();
+   		rcv = in.readObject();
+   		sent.data = "Impossibru string";
+   		assertFalse(sent.equals(rcv));
+   		
+   		sent.toString();
+   		sent.data = null;
+   		sent.toString();// GIVE ME 100% PLZ!
    	}
+    
+    private returnCode nextRetCode(returnCode r){
+    	switch(r){
+    	case OK:
+    		return Answer.returnCode.NonExistingKey;
+    	case NonExistingKey:
+    		return Answer.returnCode.WrongDataType;
+    	case WrongDataType:
+    		return Answer.returnCode.IndexOutOfListBounds;
+    	case IndexOutOfListBounds:
+    		return Answer.returnCode.OK;
+		default:
+    			return Answer.returnCode.OK;
+    	}
+    }
+    
+    private opCode nextOpCode(opCode r){
+    	if(r == Request.opCode.set)
+    		return Request.opCode.get;
+    	return Request.opCode.set;
+    }
     
     private Request generateRandomRequest(){
     	opCode opC = list_opCode.get(rand.nextInt(list_opCode.size()));
