@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>Stockage_cle_valeur</name>
+	<name>Serveur</name>
 	<comment></comment>
-	<projects> 
+	<projects>
 	</projects>
 	<buildSpec>
 		<buildCommand>

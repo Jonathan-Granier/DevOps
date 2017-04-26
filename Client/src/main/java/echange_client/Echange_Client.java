@@ -1,4 +1,4 @@
-package client.java.echange_client;
+package main.java.echange_client;
 
 import java.io.IOException;
 import java.io.InputStream;

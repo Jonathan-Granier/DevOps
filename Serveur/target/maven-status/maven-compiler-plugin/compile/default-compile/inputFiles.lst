@@ -1,0 +1,17 @@
+/home/g/granijon/M1/DevOps/Projet/Serveur/Serveur/src/main/java/interfaceserveur/operationCode.java
+/home/g/granijon/M1/DevOps/Projet/Serveur/Serveur/src/main/java/stockage_cle_valeur/ServerManager.java
+/home/g/granijon/M1/DevOps/Projet/Serveur/Serveur/src/main/java/commande_structure/Answer.java
+/home/g/granijon/M1/DevOps/Projet/Serveur/Serveur/src/main/java/main/Main.java
+/home/g/granijon/M1/DevOps/Projet/Serveur/Serveur/src/main/java/commande_structure/Request.java
+/home/g/granijon/M1/DevOps/Projet/Serveur/Serveur/src/main/java/stockage_cle_valeur/StorageServer.java
+/home/g/granijon/M1/DevOps/Projet/Serveur/Serveur/src/main/java/stockage_cle_valeur/RequestHandler.java
+/home/g/granijon/M1/DevOps/Projet/Serveur/Serveur/src/main/java/exception/WrongDataTypeException.java
+/home/g/granijon/M1/DevOps/Projet/Serveur/Serveur/src/main/java/interfaceserveur/Serveur.java
+/home/g/granijon/M1/DevOps/Projet/Serveur/Serveur/src/main/java/exception/ServerManagerNotFoundException.java
+/home/g/granijon/M1/DevOps/Projet/Serveur/Serveur/src/main/java/interfaceserveur/Echange_Serveur.java
+/home/g/granijon/M1/DevOps/Projet/Serveur/Serveur/src/main/java/exception/NonExistingKeyException.java
+/home/g/granijon/M1/DevOps/Projet/Serveur/Serveur/src/main/java/stockage_cle_valeur/StorageServerInterface.java
+/home/g/granijon/M1/DevOps/Projet/Serveur/Serveur/src/main/java/base_de_donnees/BDDInterface.java
+/home/g/granijon/M1/DevOps/Projet/Serveur/Serveur/src/main/java/base_de_donnees/BaseDeDonnees.java
+/home/g/granijon/M1/DevOps/Projet/Serveur/Serveur/src/main/java/exception/BDDNotFoundException.java
+/home/g/granijon/M1/DevOps/Projet/Serveur/Serveur/src/main/java/interfaceserveur/Accepter_connexion.java

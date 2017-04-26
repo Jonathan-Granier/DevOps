@@ -1,4 +1,4 @@
-package client.java.fichiers_client;
+package main.java.fichiers_client;
 
 public class UnknownCmdException extends Exception {
 

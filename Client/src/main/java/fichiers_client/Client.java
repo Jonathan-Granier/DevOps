@@ -1,4 +1,4 @@
-package client.java.fichiers_client;
+package main.java.fichiers_client;
 
 import java.io.IOException;
 import java.io.Serializable;
