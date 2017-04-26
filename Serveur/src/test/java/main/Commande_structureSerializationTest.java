@@ -137,6 +137,7 @@ public class Commande_structureSerializationTest {
 		
 		sent.toString();
    		sent.data = null;	// GIVE ME 100% PLZ!
+   		sent.toString();
 		
 	}
     
@@ -211,7 +212,7 @@ public class Commande_structureSerializationTest {
     
     private Request generateRandomRequest(){
     	opCode opC = list_opCode.get(rand.nextInt(list_opCode.size()));
-    	int reqNum = rand.nextInt();
+    	int reqNum = Request.getReqNumber();
     	String key = "key";
     	Serializable data = list_data.get(rand.nextInt(list_data.size()));
     	
