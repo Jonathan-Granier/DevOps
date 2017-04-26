@@ -8,7 +8,6 @@ import java.util.Scanner;
 import client.java.echange_client.Echange_Client;
 import main.java.commande_structure.Answer;
 import main.java.commande_structure.Request;
-import main.java.interfaceserveur.operationCode;
 
 /**
  * Classe interface du client : envoi des requêtes
@@ -39,7 +38,7 @@ public class Client {
 			
 			cmd = input.nextLine();
 			
-			if(cmd.equals("exit"))
+			if(cmd.equals("exit") || cmd.equals("quit"))
 				System.exit(0);
 			
 			try {
@@ -90,12 +89,12 @@ public class Client {
 	 * @return la requete correspondante
 	 * @throws UnknownCmdException 
 	 */
-	private static Request parse_cmd(String cmd) throws UnknownCmdException{
+	public static Request parse_cmd(String cmd) throws UnknownCmdException{
 		Request req = new Request();
 		
-		String delimiters = "[]+";
-		String[] vals = cmd.split(delimiters);
+		String[] vals = cmd.split("[ ]+");
 
+		System.out.println();
 		if(vals.length<2)
 			return null;
 		
@@ -163,7 +162,7 @@ public class Client {
 				throw new UnknownCmdException();
 		}
 		
-		req.reqNumber = operationCode.reqNumber();
+		req.reqNumber = Request.getReqNumber();
 		
 		return req;
 	}
@@ -178,19 +177,19 @@ public class Client {
 		if(val.startsWith("-")){
 			switch(val.substring(1)){
 			case "entier1" :
-				return (Serializable) entier1;
+				return   entier1;
 			case "entier2" :
-				return (Serializable) entier2;
+				return  entier2;
 			case "chaine1" :
-				return (Serializable) chaine1;
+				return  chaine1;
 			case "chaine2" :
-				return (Serializable) chaine2;
+				return  chaine2;
 			case "listeEntier" :
-				return (Serializable) listeEntier;
+				return  listeEntier;
 			case "listeString" :
-				return (Serializable) listeString;
+				return  listeString;
 			case "listeVide" :
-				return (Serializable) listeVide;
+				return listeVide;
 			default :
 				return val;
 			}
@@ -200,15 +199,15 @@ public class Client {
 	}
 	
 	/////////////////////// OBJETS PRE-REMPLIS ///////////////////////
-	static Object entier1 = new Integer(2);
-	static Object entier2 = new Integer(42424242);
+	static Serializable entier1 = new Integer(2);
+	static Serializable entier2 = new Integer(42424242);
 	
-	static Object chaine1 = new String("Bonjour");
-	static Object chaine2 = new String("Coucou comment ca va?");
+	static Serializable chaine1 = new String("Bonjour");
+	static Serializable chaine2 = new String("Coucou comment ca va?");
 	
-	static Object listeEntier = new ArrayList<Integer>().add(12);
+	static Serializable listeEntier = new ArrayList<Integer>().add(12);
 
-	static Object listeString = new ArrayList<String>().add("chaine de caracteres");
+	static Serializable listeString = new ArrayList<String>().add("chaine de caracteres");
 
-	static Object listeVide = new ArrayList<Object>();
+	static Serializable listeVide = new ArrayList<Object>();
 }
