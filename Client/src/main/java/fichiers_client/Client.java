@@ -1,11 +1,11 @@
-package client.java.fichiers_client;
+package main.java.fichiers_client;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import client.java.echange_client.Echange_Client;
+import main.java.echange_client.Echange_Client;
 import main.java.commande_structure.Answer;
 import main.java.commande_structure.Request;
 
