@@ -42,3 +42,11 @@ A la racine :
 Voir le Wiki sur le Dépot git  
 Lien direct : https://github.com/Jonathan-Granier/DevOps/wiki  
 Lien pour cloner : https://github.com/Jonathan-Granier/DevOps.wiki.git  
+
+
+---------------------------  
+### Problème(s) connu(s) :
+
+Travis renvoie des erreurs (de compilation) depuis quelques commits.
+Pourtant, l'exécution manuelle de "mvn test" ne provoque aucune erreur.
+Nous n'avons pas déterminé la cause de ce problème.
