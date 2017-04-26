@@ -17,58 +17,64 @@ import main.java.commande_structure.Request;
 public class Client {
 	
 	public static void main(String[] args) {
+		boolean loop = false;
 		//Connection au serveur
 		Echange_Client share = null;
 		String cmd;
 		Request req = new Request();
 		Answer ans = new Answer();
 		Scanner input = new Scanner(System.in);
+		
 		try {
 			share = new Echange_Client();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		System.out.println("PROJET DEVOPS - Client");
-		
-		while(true){
-			//Entrée des requêtes sur la ligne de commande (boucle)
+			System.out.println("PROJET DEVOPS - Client");
 			
-			System.out.print(">");
-			
-			cmd = input.nextLine();
-			
-			if(cmd.equals("exit") || cmd.equals("quit"))
-				System.exit(0);
-			else if(cmd.equals("man") || cmd.equals("help"))
-				print_list_cmd();
-			
-			try {
-				req = parse_cmd(cmd);
-			} catch (UnknownCmdException e1) {
-				e1.printStackTrace();
-			}
-		
-			try {
-				ans = share.faire_un_echange(req);
-			} catch (ClassNotFoundException | IOException e) {
-				e.printStackTrace();
-			}
+			do {
+			 //Entrée des requêtes sur la ligne de commande (boucle)
 				
-			print_ans(ans);
+				System.out.print(">");
+				
+				cmd = input.nextLine();
+				
+				if(cmd.equals("exit") || cmd.equals("quit"))
+					loop = false;
+					
+				else if(cmd.equals("man") || cmd.equals("help"))
+					print_list_cmd();
+				
+				if(loop){
+					try {
+						req = parse_cmd(cmd);
+					} catch (UnknownCmdException | InvalidInstructionException e1) {
+						e1.printStackTrace();
+					}
+				
+					try {
+						ans = share.faire_un_echange(req);
+					} catch (ClassNotFoundException | IOException e) {
+						e.printStackTrace();
+					}
+						
+					print_ans(ans);
+				}
+			}
+			while(loop);
+			share.stop_connexion();
+		} catch (IOException e) {
+			System.out.println("Echec de connexion");
 		}
-		
 	}
 
 	private static void print_list_cmd(){
 		System.out.println("Liste des commandes dispo :");
-		System.out.println("-set :");
-		System.out.println("-get :");
-		System.out.println("-increment");
-		System.out.println("-list_add");
-		System.out.println("-getAtIndex");
-		System.out.println("-list_remove");
-		System.out.println("-remove");
+		System.out.println("*set <cle> <valeur> -- sauvegarde la valeur <valeur> avec la cle <cle> ");
+		System.out.println("*get <cle> -- récupère la valeur sauvegardee avec la cle <cle>");
+		System.out.println("*increment <cle> <valeur> -- incremente de <valeur> la valeur sauvegardee avec la cle <cle> ");
+		System.out.println("*list_add <cle> <valeur> -- ajoute <valeur> a la liste sauvegardee avec <cle>. Cree une liste a cle si elle n'existe pas deja");
+		System.out.println("*getAtIndex <cle> <indice> -- recupere l'element sauvegarde a l'<indice> dans la liste <cle> ");
+		System.out.println("*list_remove <cle> <indice> -- supprime l'element a l'<indice> dans la liste <cle>");
+		System.out.println("*remove <cle> -- supprime la donnee sauvegardee avec <cle> et <cle> elle meme");
+		System.out.println();
 	}
 	
 	/**
@@ -80,9 +86,11 @@ public class Client {
 		switch(ans.return_code){
 		case OK:
 			if(ans.data.equals(null))
-				System.out.println("OK");
-			else
-				System.out.println();
+				System.out.print("OK");
+			else{
+				//TODO
+			}
+			System.out.println();
 			break;
 		case NonExistingKey :
 			System.out.println("Non existing key");
@@ -101,8 +109,9 @@ public class Client {
 	 * @param cmd l'input du client
 	 * @return la requete correspondante
 	 * @throws UnknownCmdException 
+	 * @throws InvalidInstructionException 
 	 */
-	public static Request parse_cmd(String cmd) throws UnknownCmdException{
+	public static Request parse_cmd(String cmd) throws UnknownCmdException, InvalidInstructionException{
 		Request req = new Request();
 		
 		String[] vals = cmd.split("[ ]+");
@@ -120,7 +129,7 @@ public class Client {
 					return null;
 				}
 				req.op_code = Request.opCode.set;
-				req.data = assign_data(vals[2]);
+				req.data = assign_data(vals[2],req.op_code);
 				break;
 			
 			case "get" :
@@ -137,7 +146,7 @@ public class Client {
 					return null;
 				}
 				req.op_code = Request.opCode.get_elem_of_list_at_index;
-				req.data = assign_data(vals[2]);
+				req.data = assign_data(vals[2],req.op_code);
 				break;
 				
 			case "increment" :
@@ -153,7 +162,7 @@ public class Client {
 					return null;
 				}
 				req.op_code = Request.opCode.list_add;
-				req.data = assign_data(vals[2]);
+				req.data = assign_data(vals[2],req.op_code);
 				break;
 			
 			case "list_remove" :
@@ -161,7 +170,7 @@ public class Client {
 					return null;
 				}
 				req.op_code = Request.opCode.list_remove;
-				req.data = assign_data(vals[2]);
+				req.data = assign_data(vals[2],req.op_code);
 				break;
 			
 			case "remove" :
@@ -185,8 +194,9 @@ public class Client {
 	 * Si la donnée commence par un '-' alors on assignera une donnée pré-remplie à la data
 	 * @param val la donnée entrée au clavier par l'utilisateur
 	 * @return la donnée qui sera envoyée en requête
+	 * @throws InvalidInstructionException 
 	 */
-	private static Serializable assign_data(String val){
+	private static Serializable assign_data(String val, Request.opCode op) throws InvalidInstructionException{
 		if(val.startsWith("-")){
 			switch(val.substring(1)){
 			case "entier1" :
@@ -194,14 +204,27 @@ public class Client {
 			case "entier2" :
 				return  entier2;
 			case "chaine1" :
+				if(op.equals(Request.opCode.increment) || op.equals(Request.opCode.get_elem_of_list_at_index))
+					throw new InvalidInstructionException();
 				return  chaine1;
 			case "chaine2" :
+				if(op.equals(Request.opCode.increment) || op.equals(Request.opCode.get_elem_of_list_at_index))
+					throw new InvalidInstructionException();
 				return  chaine2;
 			case "listeEntier" :
+				if(op.equals(Request.opCode.increment) || op.equals(Request.opCode.get_elem_of_list_at_index)
+						|| op.equals(Request.opCode.list_add) || op.equals(Request.opCode.list_remove))
+					throw new InvalidInstructionException();
 				return  listeEntier;
 			case "listeString" :
+				if(op.equals(Request.opCode.increment) || op.equals(Request.opCode.get_elem_of_list_at_index)
+						|| op.equals(Request.opCode.list_add) || op.equals(Request.opCode.list_remove))
+					throw new InvalidInstructionException();
 				return  listeString;
 			case "listeVide" :
+				if(op.equals(Request.opCode.increment) || op.equals(Request.opCode.get_elem_of_list_at_index)
+						|| op.equals(Request.opCode.list_add) || op.equals(Request.opCode.list_remove))
+					throw new InvalidInstructionException();
 				return listeVide;
 			default :
 				return val;
