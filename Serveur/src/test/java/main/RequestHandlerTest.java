@@ -58,11 +58,11 @@ public class RequestHandlerTest{
 		helper_set("Bonjour le monde","Hello world !");
 	}
 		
-	private void helper_set(String key, Object data) throws BDDNotFoundException, ServerMgrNotFoundException{
+	private void helper_set(String key, Serializable data) throws BDDNotFoundException, ServerMgrNotFoundException{
 		req.reqNumber = reqNum;
 		req.op_code = opCode.set;
 		req.key = key;
-		req.data = (Serializable) data;
+		req.data = data;
 		Answer ans = rqHdl.handleRequest(req);
 		assertEquals(returnCode.OK,ans.return_code);
 		assertEquals(reqNum,ans.reqNumber);
@@ -112,27 +112,6 @@ public class RequestHandlerTest{
 	}
 	
 	@Test
-	public void test_getAtIndexOnInt1() throws BDDNotFoundException, ServerMgrNotFoundException{
-		helper_getAtIndexOnSmthingElse1(42);
-	}
-	
-	@Test
-	public void test_getAtIndexOnString1() throws BDDNotFoundException, ServerMgrNotFoundException{
-		helper_getAtIndexOnSmthingElse1("666");
-	}
-	
-	private void helper_getAtIndexOnSmthingElse1(Serializable something_else) throws BDDNotFoundException, ServerMgrNotFoundException{
-		helper_set("list ?",something_else);
-		reqNum++;
-		req.reqNumber = reqNum;
-		req.op_code = opCode.get_elem_of_list_at_index;
-		req.key = "list ?";
-		req.data = 0;
-		Answer ans = rqHdl.handleRequest(req);
-		assertEquals(returnCode.WrongDataType,ans.return_code);
-	}
-	
-	@Test
 	public void test_getAtIndex2() throws BDDNotFoundException, ServerMgrNotFoundException{
 		helper_add1List("list",42);
 		reqNum++;
@@ -145,19 +124,22 @@ public class RequestHandlerTest{
 		Answer ans = rqHdl.handleRequest(req);
 		assertEquals("coucou",ans.data);
 	}
-	
+
 	@Test
-	public void test_getAtIndexOnInt2() throws BDDNotFoundException, ServerMgrNotFoundException{
-		helper_getAtIndexOnSmthingElse2(42);
+	public void test_getAtIndexOnSmthingElse1() throws BDDNotFoundException, ServerMgrNotFoundException{
+		helper_set("list ?",42);
+		reqNum++;
+		req.reqNumber = reqNum;
+		req.op_code = opCode.get_elem_of_list_at_index;
+		req.key = "list ?";
+		req.data = 0;
+		Answer ans = rqHdl.handleRequest(req);
+		assertEquals(returnCode.WrongDataType,ans.return_code);
 	}
 	
 	@Test
-	public void test_getAtIndexOnString2() throws BDDNotFoundException, ServerMgrNotFoundException{
-		helper_getAtIndexOnSmthingElse2("666");
-	}
-	
-	private void helper_getAtIndexOnSmthingElse2(Serializable something_else) throws BDDNotFoundException, ServerMgrNotFoundException{
-		helper_set("list ?",something_else);
+	public void test_getAtIndexOnSmthingElse2() throws BDDNotFoundException, ServerMgrNotFoundException{
+		helper_set("list ?",666);
 		reqNum++;
 		req.reqNumber = reqNum;
 		req.op_code = opCode.get_elem_of_list_at_index;
@@ -192,13 +174,32 @@ public class RequestHandlerTest{
 	}
 	
 	@Test
-	public void test_incrInt() throws BDDNotFoundException, ServerMgrNotFoundException{
+	public void test_incrInt1() throws BDDNotFoundException, ServerMgrNotFoundException{
 		helper_set("cle42",42);
 		reqNum++;
 		req.reqNumber = reqNum;
 		req.op_code = opCode.increment;
 		req.key = "cle42";
 		req.data = 24;
+		rqHdl.handleRequest(req);
+		
+		reqNum++;
+		req.reqNumber = reqNum;
+		req.op_code = opCode.get;
+		req.key = "cle42";
+		req.data = null;
+		Answer ans = rqHdl.handleRequest(req);
+		assertEquals(66,ans.data);
+	}
+	
+	@Test
+	public void test_incrInt2() throws BDDNotFoundException, ServerMgrNotFoundException{
+		helper_set("cle42",42);
+		reqNum++;
+		req.reqNumber = reqNum;
+		req.op_code = opCode.increment;
+		req.key = "cle42";
+		req.data = "24";
 		rqHdl.handleRequest(req);
 		
 		reqNum++;
@@ -250,7 +251,7 @@ public class RequestHandlerTest{
 	}
 	
 	@Test
-	public void test_addElemToInt1() throws BDDNotFoundException, ServerMgrNotFoundException{
+	public void test_addElemToSmthingElse1() throws BDDNotFoundException, ServerMgrNotFoundException{
 		helper_set("cle4",42);
 		reqNum++;
 		req.reqNumber = reqNum;
@@ -262,19 +263,7 @@ public class RequestHandlerTest{
 	}
 	
 	@Test
-	public void test_addElemToString1() throws BDDNotFoundException, ServerMgrNotFoundException{
-		helper_set("cle4","chaine de caracteres quelconque");
-		reqNum++;
-		req.reqNumber = reqNum;
-		req.op_code = opCode.list_add;
-		req.key = "cle4";
-		req.data = 23;
-		Answer ans = rqHdl.handleRequest(req);
-		assertEquals(returnCode.WrongDataType,ans.return_code);
-	}
-	
-	@Test
-	public void test_addElemToInt2() throws BDDNotFoundException, ServerMgrNotFoundException{
+	public void test_addElemToSmthingElse2() throws BDDNotFoundException, ServerMgrNotFoundException{
 		helper_set("cle4",42);
 		reqNum++;
 		req.reqNumber = reqNum;
@@ -286,29 +275,8 @@ public class RequestHandlerTest{
 	}
 	
 	@Test
-	public void test_addElemToString2() throws BDDNotFoundException, ServerMgrNotFoundException{
-		helper_set("cle4","chaine de caracteres quelconque");
-		reqNum++;
-		req.reqNumber = reqNum;
-		req.op_code = opCode.list_add;
-		req.key = "cle4";
-		req.data = "23";
-		Answer ans = rqHdl.handleRequest(req);
-		assertEquals(returnCode.WrongDataType,ans.return_code);
-	}
-	
-	@Test
-	public void test_removeAtIndexOnInt1() throws BDDNotFoundException, ServerMgrNotFoundException{
-		helper_removeAtIndexOnSmthingElse1(42);
-	}
-	
-	@Test
-	public void test_removeAtIndexOnString1() throws BDDNotFoundException, ServerMgrNotFoundException{
-		helper_removeAtIndexOnSmthingElse1("666");
-	}
-	
-	private void helper_removeAtIndexOnSmthingElse1(Serializable something_else) throws BDDNotFoundException, ServerMgrNotFoundException{
-		helper_set("list ?",something_else);
+	public void test_removeAtIndexOnSmthingElse() throws BDDNotFoundException, ServerMgrNotFoundException{
+		helper_set("list ?",42);
 		reqNum++;
 		req.reqNumber = reqNum;
 		req.op_code = opCode.list_remove;
@@ -319,34 +287,25 @@ public class RequestHandlerTest{
 	}
 	
 	@Test
-	public void test_removeAtIndexOnInt2() throws BDDNotFoundException, ServerMgrNotFoundException{
-		helper_removeAtIndexOnSmthingElse2(42);
-	}
-	
-	@Test
-	public void test_removeAtIndexOnString2() throws BDDNotFoundException, ServerMgrNotFoundException{
-		helper_removeAtIndexOnSmthingElse2("666");
-	}
-	
-	private void helper_removeAtIndexOnSmthingElse2(Serializable something_else) throws BDDNotFoundException, ServerMgrNotFoundException{
-		helper_set("list ?",something_else);
-		reqNum++;
-		req.reqNumber = reqNum;
-		req.op_code = opCode.list_remove;
-		req.key = "list ?";
-		req.data = "0";
-		Answer ans = rqHdl.handleRequest(req);
-		assertEquals(returnCode.WrongDataType,ans.return_code);
-	}
-	
-	@Test
-	public void test_removeAtWrongIndex() throws BDDNotFoundException, ServerMgrNotFoundException{
+	public void test_removeAtWrongIndex1() throws BDDNotFoundException, ServerMgrNotFoundException{
 		helper_add1List("list",69);
 		reqNum++;
 		req.reqNumber = reqNum;
 		req.op_code = opCode.list_remove;
 		req.key = "list";
 		req.data = 42;
+		Answer ans = rqHdl.handleRequest(req);
+		assertEquals(returnCode.IndexOutOfListBounds,ans.return_code);
+	}
+	
+	@Test
+	public void test_removeAtWrongIndex2() throws BDDNotFoundException, ServerMgrNotFoundException{
+		helper_add1List("list",69);
+		reqNum++;
+		req.reqNumber = reqNum;
+		req.op_code = opCode.list_remove;
+		req.key = "list";
+		req.data = "42";
 		Answer ans = rqHdl.handleRequest(req);
 		assertEquals(returnCode.IndexOutOfListBounds,ans.return_code);
 	}
@@ -382,19 +341,12 @@ public class RequestHandlerTest{
 		helper_set("cle6",666);
 	}
 	
-	@After
-	public void incrReqNum(){
-		reqNum++;
-	}
-	
-
-	
 	@Test
 	public void test_getWrongKey() throws BDDNotFoundException, ServerMgrNotFoundException{
 		req.reqNumber = reqNum;
 		req.op_code = opCode.get;
 		req.key = "list";
-		req.data = 42;
+		req.data = null;
 		Answer ans = rqHdl.handleRequest(req);
 		assertEquals(returnCode.NonExistingKey,ans.return_code);
 	}
@@ -437,6 +389,11 @@ public class RequestHandlerTest{
 		req.data = 42;
 		Answer ans = rqHdl.handleRequest(req);
 		assertEquals(returnCode.NonExistingKey,ans.return_code);
+	}
+	
+	@After
+	public void incrReqNum(){
+		reqNum++;
 	}
 }
 
