@@ -39,4 +39,6 @@ A la racine :
 ---------------------------  
 ### Travail effectué :
 
-TODO : put some work done here
+Voir le Wiki sur le Dépot git  
+Lien direct : https://github.com/Jonathan-Granier/DevOps/wiki  
+Lien pour cloner : https://github.com/Jonathan-Granier/DevOps.wiki.git  
