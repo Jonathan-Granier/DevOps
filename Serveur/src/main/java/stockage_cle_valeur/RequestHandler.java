@@ -117,6 +117,7 @@ public class RequestHandler {
 				else
 					i = (Integer)req.data;
 				server_manager.add(req.key,(Integer)theoretical_int + i);
+				ans.data = (Integer)theoretical_int + i;
 			}
 			else{
 				ans.return_code = returnCode.WrongDataType;
