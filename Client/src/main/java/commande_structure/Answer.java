@@ -29,4 +29,11 @@ public class Answer implements Serializable {
 				&& this.data.equals(ansthat.data);
 		
 	}
+	public String toString(){
+		if(data!= null)
+		{
+			return "ReqNumber : "+ reqNumber + " | Return_Code : "+ return_code + " | data : "+data.toString();
+		}
+		return "ReqNumber : "+ reqNumber + " | Return_Code : "+ return_code ;
+	}
 }

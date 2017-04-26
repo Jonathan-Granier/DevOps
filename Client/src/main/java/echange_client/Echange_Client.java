@@ -58,8 +58,9 @@ public class Echange_Client {
      */
     private void start_Connexion()throws UnknownHostException, IOException{
     	socket = new Socket(IP,num_Socket);
-    	in = new ObjectInputStream(socket.getInputStream());
     	out = new ObjectOutputStream(socket.getOutputStream());
+    	in = new ObjectInputStream(socket.getInputStream());
+    	
     }
     
     /**
@@ -72,8 +73,9 @@ public class Echange_Client {
     	
     	envoi_data(data_emmision);
     	
+    	Answer retour = reception_data();
     	
-    	
+    	System.out.println("J'ai recu : "+retour.toString());
     	return reception_data();
     }
     

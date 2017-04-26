@@ -72,7 +72,7 @@ public class Echange_Serveur implements Runnable {
 				
 				answer = requestHandler.handleRequest(request);
 				
-				System.out.println("[Echange_Server] J'envoi quelque chose" );
+				System.out.println("[Echange_Server] J'envoi quelque chose : "+answer.toString() );
 				emmision(answer);
 			} catch (BDDNotFoundException e) {
 				// TODO Auto-generated catch block

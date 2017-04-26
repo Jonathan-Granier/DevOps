@@ -39,7 +39,7 @@ public class Accepter_connexion implements Runnable{
 	
 		        socket = socketserver.accept();
 		
-		        System.out.println("Un client veut se connecter ");
+		        System.out.println("Un client s'est connecté ");
 		        t1 = new Thread(new Echange_Serveur(socket,serverManager));
 		
 		        t1.start();
