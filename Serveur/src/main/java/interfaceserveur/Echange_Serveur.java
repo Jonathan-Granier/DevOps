@@ -42,12 +42,14 @@ public class Echange_Serveur implements Runnable {
 		
 		Maintient_connexion = true;
 		try {
-			in = new ObjectInputStream(socket.getInputStream());
 			out = new ObjectOutputStream(socket.getOutputStream());
+			in = new ObjectInputStream(socket.getInputStream());
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        
+		
+		
 	}
 	
 	
@@ -62,8 +64,10 @@ public class Echange_Serveur implements Runnable {
 		while(Maintient_connexion)
 		{
 			try {	
+				//System.out.println("[Echange_Server] J'attends une nouvelle requete");
+				
 				request = reception();
-				System.out.println("[Echange_Server] J'ai recu quelque chose");
+				System.out.println("[Echange_Server] J'ai recu quelque chose : "+ request.toString());
 				
 				answer = requestHandler.handleRequest(request);
 				
@@ -71,15 +75,25 @@ public class Echange_Serveur implements Runnable {
 				emmision(answer);
 			} catch (BDDNotFoundException e) {
 				// TODO Auto-generated catch block
+				Maintient_connexion = false;
 				e.printStackTrace();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//Maintient_connexion = false;
+				//e.printStackTrace();
+				// C'est NORMAL , TOUT VA BIEN !
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
+				Maintient_connexion = false;
 				e.printStackTrace();
 			}
 			
+		}
+		try {
+			stopconnexion();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 	}
@@ -90,12 +104,15 @@ public class Echange_Serveur implements Runnable {
 	 * @throws ClassNotFoundException 
 	 */
 	private Request reception() throws ClassNotFoundException, IOException{
+		
 		Object data_rcv = in.readObject();
 		Request request_rcv = null;
 		if(data_rcv instanceof Request)
 		{
 			request_rcv = (Request) data_rcv;
 		}
+		//in.close();
+		
 		return request_rcv;
 	}
 	
@@ -106,7 +123,7 @@ public class Echange_Serveur implements Runnable {
 	private void emmision(Answer data_emmision) throws IOException{
 		out.writeObject(data_emmision);
 		out.flush();
-        
+       // out.close();
 	}
 	
 	/**
@@ -114,6 +131,7 @@ public class Echange_Serveur implements Runnable {
 	 * @throws IOException
 	 */
 	public void stopconnexion() throws IOException{
+		System.out.println("[Echange_client] Arret de la connexion avec le client");
 		Maintient_connexion = false;
 		socket.close();
 		
