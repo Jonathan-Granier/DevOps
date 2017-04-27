@@ -75,7 +75,7 @@ public class Echange_Client {
     	
     	Answer retour = reception_data();
     	
-    	System.out.println("J'ai recu : "+retour.toString());
+    	//System.out.println("J'ai recu : "+retour.toString());
     	return retour;
     }
     
